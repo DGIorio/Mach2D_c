@@ -7,6 +7,7 @@ double norm_l1_5d(int nx, int ny, double* var, double* b, double** a, double nor
 {
 	// Auxiliary variables
 	int i, j, np, nps, npn, npw, npe;
+	double aux1;
 
 	// Norm is calculated taking into account only real volumes
 	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
@@ -20,7 +21,7 @@ double norm_l1_5d(int nx, int ny, double* var, double* b, double** a, double nor
 			npe = np + 1;
 
 			norm = norm + std::fabs(
-				+a[np][0] * var[nps]
+				  a[np][0] * var[nps]
 				+ a[np][1] * var[npw]
 				+ a[np][2] * var[np]
 				+ a[np][3] * var[npe]
@@ -35,6 +36,7 @@ double norm_l1_9d(int nx, int ny, double* var, double* b, double** a, double nor
 {
 	// Auxiliary variables
 	int i, j, np, nps, npn, npw, npe, npsw, npse, npnw, npne;
+	double aux1;
 
 	// Norm is calculated taking into account only real volumes
 	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
@@ -52,7 +54,7 @@ double norm_l1_9d(int nx, int ny, double* var, double* b, double** a, double nor
 			npne = npn + 1;
 
 			norm = norm + std::fabs(
-				+a[np][0] * var[npsw]
+				  a[np][0] * var[npsw]
 				+ a[np][1] * var[nps]
 				+ a[np][2] * var[npse]
 				+ a[np][3] * var[npw]
@@ -62,6 +64,7 @@ double norm_l1_9d(int nx, int ny, double* var, double* b, double** a, double nor
 				+ a[np][7] * var[npn]
 				+ a[np][8] * var[npne]
 				- b[np]);
+
 		}
 	}
 	return norm;

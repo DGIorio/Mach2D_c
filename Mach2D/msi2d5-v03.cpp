@@ -81,23 +81,23 @@ double* fb2d5(double** b, double** dl, double** du, int nj, int ni, int nij, dou
 		ie = ip + 1;
 		is = ip - ni;
 		in = ip + ni;
-		if ((ip + 1) % ni == 0)
+		switch ((ip + 1) % ni)
 		{
+		case 0:
 			r[ip] = -rhs[ip] + b[ip][0] * var[is]
 				+ b[ip][1] * var[iw] + b[ip][2] * var[ip]
 				+ b[ip][4] * var[in];
-		}
-		else if ((ip + 1) % ni == 1)
-		{
+			break;
+		case 1:
 			r[ip] = -rhs[ip] + b[ip][0] * var[is]
 				+ b[ip][2] * var[ip] + b[ip][3] * var[ie]
 				+ b[ip][4] * var[in];
-		}
-		else
-		{
+			break;
+		default:
 			r[ip] = -rhs[ip] + b[ip][0] * var[is]
 				+ b[ip][1] * var[iw] + b[ip][2] * var[ip] + b[ip][3] * var[ie]
 				+ b[ip][4] * var[in];
+			break;
 		}
 	}
 	//--------------------------------------------------------------------------------
@@ -209,23 +209,23 @@ double* fb2d5(double** b, double** dl, double** du, int nj, int ni, int nij, dou
 			ie = ip + 1;
 			is = ip - ni;
 			in = ip + ni;
-			if ((ip + 1) % ni == 0)
+			switch ((ip + 1) % ni)
 			{
+			case 0:
 				r[ip] = -rhs[ip] + b[ip][0] * var[is]
 					+ b[ip][1] * var[iw] + b[ip][2] * var[ip]
 					+ b[ip][4] * var[in];
-			}
-			else if ((ip + 1) % ni == 1)
-			{
+				break;
+			case 1:
 				r[ip] = -rhs[ip] + b[ip][0] * var[is]
 					+ b[ip][2] * var[ip] + b[ip][3] * var[ie]
 					+ b[ip][4] * var[in];
-			}
-			else
-			{
+				break;
+			default:
 				r[ip] = -rhs[ip] + b[ip][0] * var[is]
 					+ b[ip][1] * var[iw] + b[ip][2] * var[ip] + b[ip][3] * var[ie]
 					+ b[ip][4] * var[in];
+				break;
 			}
 		}
 		//--------------------------------------------------------------------------------

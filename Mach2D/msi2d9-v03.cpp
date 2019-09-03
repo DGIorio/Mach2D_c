@@ -89,23 +89,23 @@ double* fb2d9(double** b, double** dl, double** du, int nj, int ni, int nij, dou
 		ise = is + 1;
 		inw = in - 1;
 		ine = in + 1;
-		if ((ip+1) % ni == 1)
+		switch ((ip + 1) % ni)
 		{
-			r[ip] = -rhs[ip] + b[ip][1] * var[is] + b[ip][2] * var[ise]
-				+ b[ip][4] * var[ip] + b[ip][5] * var[ie]
-				+ b[ip][7] * var[in] + b[ip][8] * var[ine];
-		}
-		else if ((ip + 1) % ni == 0)
-		{
+		case 0:
 			r[ip] = -rhs[ip] + b[ip][0] * var[isw] + b[ip][1] * var[is]
 				+ b[ip][3] * var[iw] + b[ip][4] * var[ip]
 				+ b[ip][6] * var[inw] + b[ip][7] * var[in];
-		}
-		else
-		{
+			break;
+		case 1:
+			r[ip] = -rhs[ip] + b[ip][1] * var[is] + b[ip][2] * var[ise]
+				+ b[ip][4] * var[ip] + b[ip][5] * var[ie]
+				+ b[ip][7] * var[in] + b[ip][8] * var[ine];
+			break;
+		default:
 			r[ip] = -rhs[ip] + b[ip][0] * var[isw] + b[ip][1] * var[is] + b[ip][2] * var[ise]
 				+ b[ip][3] * var[iw] + b[ip][4] * var[ip] + b[ip][5] * var[ie]
 				+ b[ip][6] * var[inw] + b[ip][7] * var[in] + b[ip][8] * var[ine];
+			break;
 		}
 	}
 	//--------------------------------------------------------------------------------
@@ -235,23 +235,23 @@ double* fb2d9(double** b, double** dl, double** du, int nj, int ni, int nij, dou
 			ise = is + 1;
 			inw = in - 1;
 			ine = in + 1;
-			if ((ip + 1) % ni == 1)
+			switch ((ip + 1) % ni)
 			{
-				r[ip] = -rhs[ip] + b[ip][1] * var[is] + b[ip][2] * var[ise]
-					+ b[ip][4] * var[ip] + b[ip][5] * var[ie]
-					+ b[ip][7] * var[in] + b[ip][8] * var[ine];
-			}
-			else if ((ip + 1) % ni == 0)
-			{
+			case 0:
 				r[ip] = -rhs[ip] + b[ip][0] * var[isw] + b[ip][1] * var[is]
 					+ b[ip][3] * var[iw] + b[ip][4] * var[ip]
 					+ b[ip][6] * var[inw] + b[ip][7] * var[in];
-			}
-			else
-			{
+				break;
+			case 1:
+				r[ip] = -rhs[ip] + b[ip][1] * var[is] + b[ip][2] * var[ise]
+					+ b[ip][4] * var[ip] + b[ip][5] * var[ie]
+					+ b[ip][7] * var[in] + b[ip][8] * var[ine];
+				break;
+			default:
 				r[ip] = -rhs[ip] + b[ip][0] * var[isw] + b[ip][1] * var[is] + b[ip][2] * var[ise]
 					+ b[ip][3] * var[iw] + b[ip][4] * var[ip] + b[ip][5] * var[ie]
 					+ b[ip][6] * var[inw] + b[ip][7] * var[in] + b[ip][8] * var[ine];
+				break;
 			}
 		}
 		//--------------------------------------------------------------------------------
@@ -463,4 +463,12 @@ diagonal_matrix lu2d9(double** b, int nij, int ni, int nj, double** dl, double**
 	result.lower = dl;
 	result.upper = du;
 	return result;
+}
+
+int fast_mod(const int input, const int ceil)
+{
+	// apply the modulo operator only when needed
+	// (i.e. when the input is greater than the ceiling)
+	return input >= ceil ? input % ceil : input;
+	// NB: the assumption here is that the numbers are positive
 }

@@ -174,7 +174,7 @@ source_correction get_u_source(int nx, int ny, double beta, double dt, double* r
 
 			// Contribution to b due to pressure term
 			b[np] = b[np] + 0.5 * rp[np] * (
-				+yk[np] * (p[npn] + p[np])
+				  yk[np] * (p[npn] + p[np])
 				- yk[nps] * (p[nps] + p[np])
 				- ye[np] * (p[npe] + p[np])
 				+ ye[npw] * (p[npw] + p[np])
@@ -295,7 +295,7 @@ source_correction get_v_source(int nx, int ny, double beta, double dt, double* r
 
 			// Contribution to b due to pressure term
 			b[np] = b[np] + 0.5 * rp[np] * (
-				+xe[np] * (p[np] + p[npe])
+				  xe[np] * (p[np] + p[npe])
 				- xe[npw] * (p[np] + p[npw])
 				- xk[np] * (p[np] + p[npn])
 				+ xk[nps] * (p[np] + p[nps])
@@ -377,14 +377,14 @@ coeffs_source get_T_coefficients_and_source(int nx, int ny, double beta, double 
 
 			// Contribution to the SOURCE due to pressure term
 			pup = 0.5 *  rp[np] * (
-				+yk[np] * (p[npn] + p[np])
+				  yk[np] * (p[npn] + p[np])
 				- yk[nps] * (p[nps] + p[np])
 				- ye[np] * (p[npe] + p[np])
 				+ ye[npw] * (p[npw] + p[np])
 				);
 
 			pvp = 0.5 *   rp[np] * (
-				+xe[np] * (p[np] + p[npe])
+				  xe[np] * (p[np] + p[npe])
 				- xe[npw] * (p[np] + p[npw])
 				- xk[np] * (p[np] + p[npn])
 				+ xk[nps] * (p[np] + p[nps])
@@ -799,14 +799,14 @@ velocity get_u_v_at_real_nodes_with_pl(int nx, int ny, double* xe, double* ye, d
 			npe = np + 1;
 
 			plup = 0.5 *  rp[np] * (
-				+yk[np] * (pl[npn] + pl[np])
+				  yk[np] * (pl[npn] + pl[np])
 				- yk[nps] * (pl[nps] + pl[np])
 				- ye[np] * (pl[npe] + pl[np])
 				+ ye[npw] * (pl[npw] + pl[np])
 				);
 
 			plvp = 0.5 *   rp[np] * (
-				+xe[np] * (pl[np] + pl[npe])
+				  xe[np] * (pl[np] + pl[npe])
 				- xe[npw] * (pl[np] + pl[npw])
 				- xk[np] * (pl[np] + pl[npn])
 				+ xk[nps] * (pl[np] + pl[nps])
