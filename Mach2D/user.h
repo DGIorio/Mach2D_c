@@ -9,13 +9,13 @@ double* set_cp(int nx, int ny, double* cp);
 double* set_gamma(int nx, int ny, double Rg, double* cp, double* gcp);
 
 // talvez mudar a, b para inout
-coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double* alphae, double* betae, double* u, double* v, double* Uce, double* Vcw, double** a, double* b);
+coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double* alphae, double* betae, double* u, double* v, double* Uce, double* Vcw, double* a, double* b);
 
-coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double* v, double* Uce, double* Vcw, double** a, double* b);
+coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double* v, double* Uce, double* Vcw, double* a, double* b);
 
-coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, double* T, double* alphae, double* betae, double* betan, double* gamman, double** a, double* b);
+coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, double* T, double* alphae, double* betae, double* betan, double* gamman, double* a, double* b);
 
-coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* betan, double* gamman, double* Uce, double* Vcw, double* p, double** a, double* b);
+coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* betan, double* gamman, double* Uce, double* Vcw, double* p, double* a, double* b);
 
 double* get_Vcw(int nx, int ny, double* xe, double* xk, double* ue, double* ve, double* Vcw);
 

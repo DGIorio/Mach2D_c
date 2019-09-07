@@ -259,3 +259,5 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/Mach2D_using2D_arrays.rar
+/Mach2D/mach2d_output/mach2d_S01_residual_60938.4.dat

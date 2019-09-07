@@ -8,12 +8,7 @@ coordinates get_grid_boundary_power_law(int nx, int ny, double akn, double aks, 
 	int i, j, np;
 	double aux;
 	double const pi = 3.141592653589793238463;	//requires less calculation time
-	//double* x;
-	//double* y;
 	coordinates result;
-
-	//x = new double[nx*ny];
-	//y = new double[nx*ny];
 
 	// North boundary
 	j = ny - 1;
@@ -50,8 +45,6 @@ double f_body_shape(double x, double lr, double rb)
 double* set_cp(int nx, int ny, double* cp)
 {
 	// Calculates cp at the center of each real volume.
-	//double* cp;
-	//cp = new double[nx*ny];
 	std::fill_n(cp, nx*ny, 1003.8);	// or for (int i = 0; i < nx*ny; i++)
 	return cp;
 }
@@ -60,9 +53,6 @@ double* set_gamma(int nx, int ny, double Rg, double* cp, double* gcp)
 {
 	// Calculates gamma = Cp / Cv at the center of each real volume based on Cp and Rg.
 	int i;
-	//double* gcp;
-	//gcp = new double[nx*ny];
-	//std::transform(gcp.begin(), gcp.end(), gcp.begin(), bind2nd(std::minus<float>(), Rg));
 	for (i = 0; i <= nx*ny - 1; i += 1)
 	{
 		gcp[i] = cp[i] / (cp[i] - Rg);
@@ -70,11 +60,9 @@ double* set_gamma(int nx, int ny, double Rg, double* cp, double* gcp)
 	return gcp;
 }
 
-coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double* alphae, double* betae, double* u, double* v, double* Uce, double* Vcw, double** a, double* b)
+coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double* alphae, double* betae, double* u, double* v, double* Uce, double* Vcw, double* a, double* b)
 {
 	// Calculates the coefficients and source of the linear system of u for the fictitious volumes based on the boundary conditions.
-	//double** a(nx*ny, std::vector<double>(9));
-	//double* b(nx*ny);
 
 	// Auxiliary variables
 	int i;
@@ -113,10 +101,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
-	a[np][4] =  1.0;
-	a[np][5] = -1.0;
+	a[np * 9 + 4] =  1.0;
+	a[np * 9 + 5] = -1.0;
 
 	u_eta = 0.5*(-u[npnne] + 4.0*u[npne] - 3.0*u[npe]);
 
@@ -132,10 +120,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][4] = 1.0;
-		a[np][5] = -1.0;
+		a[np * 9 + 4] = 1.0;
+		a[np * 9 + 5] = -1.0;
 
 		u_eta = 0.5 * (u[npne] - u[npse]);
 
@@ -152,10 +140,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
-	a[np][4] = 1.0;
-	a[np][5] = -1.0;
+	a[np * 9 + 4] = 1.0;
+	a[np * 9 + 5] = -1.0;
 
 	u_eta = 0.5 * (u[npsse] - 4.0 * u[npse] + 3.0 * u[npe]);
 
@@ -175,10 +163,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
-	a[np][3] = -1.0;
-	a[np][4] = 1.0;
+	a[np * 9 + 3] = -1.0;
+	a[np * 9 + 4] = 1.0;
 
 	u_eta = 0.5 * (-u[npnnw] + 4.0 * u[npnw] - 3.0 * u[npw]);
 
@@ -197,10 +185,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][3] = -1.0;
-		a[np][4] = 1.0;
+		a[np * 9 + 3] = -1.0;
+		a[np * 9 + 4] = 1.0;
 
 		u_eta = 0.50 * (u[npnw] - u[npsw]);
 
@@ -217,10 +205,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
-	a[np][3] = -1.0;
-	a[np][4] = 1.0;
+	a[np * 9 + 3] = -1.0;
+	a[np * 9 + 4] = 1.0;
 
 	u_eta = 0.5 * (3.0 * u[npw] - 4.0 * u[npsw] + u[npssw]);
 
@@ -236,10 +224,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][7] = 1.0;
-		a[np][4] = 1.0;
+		a[np * 9 + 7] = 1.0;
+		a[np * 9 + 4] = 1.0;
 
 		aux = sqrt((u[npn] * u[npn] + v[npn] * v[npn]) / (xk[np] * xk[np] + yk[np] * yk[np]))
 			* 1.0*sign(u[npn] * xk[np] + v[npn] * yk[np]);
@@ -255,10 +243,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 		np = nx * (j - 1) + i;
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][4] = 1.0;
-		a[np][1] = 1.0;
+		a[np * 9 + 4] = 1.0;
+		a[np * 9 + 1] = 1.0;
 
 		b[np] = 2.0*UF;
 	}
@@ -275,10 +263,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 		
 	b[np] = (u[npn] + u[npe] + u[npne]) / 3.0;
 
@@ -293,10 +281,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 		
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 		
 	b[np] = (u[npn] + u[npw] + u[npnw]) / 3.0;
 
@@ -310,10 +298,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 
 	b[np] = (u[nps] + u[npe] + u[npse]) / 3.0;
 
@@ -327,10 +315,10 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 
 	b[np] = (u[nps] + u[npw] + u[npsw]) / 3.0;
 
@@ -340,11 +328,9 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 	return result;
 }
 
-coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double* v, double* Uce, double* Vcw, double** a, double* b)
+coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double* v, double* Uce, double* Vcw, double* a, double* b)
 {
 	// Calculates the coefficients and source of the linear system of v for the fictitious volumes based on the boundary conditions.
-	//double** a(nx*ny, std::vector<double>(9));
-	//double* b(nx*ny);
 
 	// Auxiliary variables
 	int i;
@@ -374,10 +360,10 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 		np = nx * (j - 1) + i;
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][4] = 1.0;
-		a[np][5] = 1.0;
+		a[np * 9 + 4] = 1.0;
+		a[np * 9 + 5] = 1.0;
 		b[np] = 0.0;
 	}
 
@@ -394,10 +380,10 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
-	a[np][3] = -1.0;
-	a[np][4] = 1.0;
+	a[np * 9 + 3] = -1.0;
+	a[np * 9 + 4] = 1.0;
 
 	v_eta = 0.5 * (-v[npnnw] + 4.0 * v[npnw] - 3.0 * v[npw]);
 
@@ -414,10 +400,10 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 		
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][3] = -1.0;
-		a[np][4] = 1.0;
+		a[np * 9 + 3] = -1.0;
+		a[np * 9 + 4] = 1.0;
 
 		v_eta = 0.5 * (v[npnw] - v[npsw]);
 
@@ -435,10 +421,10 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
-	a[np][3] = -1.0;
-	a[np][4] = 1.0;
+	a[np * 9 + 3] = -1.0;
+	a[np * 9 + 4] = 1.0;
 
 	v_eta = 0.5 * (3.0 * v[npw] - 4.0 * v[npsw] + v[npssw]);
 
@@ -453,10 +439,10 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][4] = 1.0;
-		a[np][7] = 1.0;
+		a[np * 9 + 4] = 1.0;
+		a[np * 9 + 7] = 1.0;
 
 		aux = sqrt((u[npn] * u[npn] + v[npn] * v[npn]) / (xk[np] * xk[np] + yk[np] * yk[np]))
 			* 1.0*sign(u[npn] * xk[np] + v[npn] * yk[np]);
@@ -472,10 +458,10 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][4] = 1.0;
-		a[np][1] = 1.0;
+		a[np * 9 + 4] = 1.0;
+		a[np * 9 + 1] = 1.0;
 
 		b[np] = 0.0;
 	}
@@ -491,10 +477,10 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 
 	b[np] = (v[npn] + v[npe] + v[npne]) / 3.0;
 
@@ -509,10 +495,10 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 
 	b[np] = (v[npn] + v[npw] + v[npnw]) / 3.0;
 
@@ -526,10 +512,10 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 
 	b[np] = (v[nps] + v[npe] + v[npse]) / 3.0;
 
@@ -543,10 +529,10 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 
 	b[np] = (v[nps] + v[npw] + v[npsw]) / 3.0;
 
@@ -556,11 +542,9 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 	return result;
 }
 
-coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, double* T, double* alphae, double* betae, double* betan, double* gamman, double** a, double* b)
+coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, double* T, double* alphae, double* betae, double* betan, double* gamman, double* a, double* b)
 {
 	// Calculates the coefficients  and source of the linear system of T for the fictitious volumes based on the boundary conditions.
-	//double** a(nx*ny, std::vector<double>(9));
-	//double* b(nx*ny);
 
 	// Auxiliary variables
 	int i;
@@ -596,10 +580,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
-	a[np][4] = 1.0;
-	a[np][5] = -1.0;
+	a[np * 9 + 4] = 1.0;
+	a[np * 9 + 5] = -1.0;
 
 	Te = 0.5 * (-T[npnne] + 4.0 * T[npne] - 3.0 * T[npe]);
 
@@ -615,10 +599,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][4] = 1.0;
-		a[np][5] = -1.0;
+		a[np * 9 + 4] = 1.0;
+		a[np * 9 + 5] = -1.0;
 
 		Te = 0.5 * (T[npne] - T[npse]);
 
@@ -635,10 +619,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
-	a[np][4] = 1.0;
-	a[np][5] = -1.0;
+	a[np * 9 + 4] = 1.0;
+	a[np * 9 + 5] = -1.0;
 
 	Te = 0.5 * (T[npsse] - 4.0 * T[npse] + 3.0 * T[npe]);
 
@@ -655,10 +639,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
-	a[np][3] = -1.0;
-	a[np][4] = 1.0;
+	a[np * 9 + 3] = -1.0;
+	a[np * 9 + 4] = 1.0;
 
 	Te = 0.5 * (-T[npnnw] + 4.0 * T[npnw] - 3.0 * T[npw]);
 
@@ -675,10 +659,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][3] = -1.0;
-		a[np][4] = 1.0;
+		a[np * 9 + 3] = -1.0;
+		a[np * 9 + 4] = 1.0;
 
 		Te = 0.5 * (T[npnw] - T[npsw]);
 
@@ -694,10 +678,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
-	a[np][3] = -1.0;
-	a[np][4] = 1.0;
+	a[np * 9 + 3] = -1.0;
+	a[np * 9 + 4] = 1.0;
 
 	Te = 0.5 * (3.0 * T[npw] - 4.0 * T[npsw] + T[npssw]);
 
@@ -718,10 +702,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][4] = 1.0;
-		a[np][7] = -1.0;
+		a[np * 9 + 4] = 1.0;
+		a[np * 9 + 7] = -1.0;
 
 		Tk = 0.25 * (T[npe] + T[npne] - T[npw] - T[npnw]);
 
@@ -736,10 +720,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 		np = nx * (j - 1) + i;
 		for (k = 0; k <= 9 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 9 + k] = 0.0;
 		}
-		a[np][4] = 1.0;
-		a[np][1] = 1.0;
+		a[np * 9 + 4] = 1.0;
+		a[np * 9 + 1] = 1.0;
 		b[np] = 2.0 * TF;
 	}
 
@@ -754,10 +738,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 
 	b[np] = (T[npn] + T[npe] + T[npne]) / 3.0;
 
@@ -772,10 +756,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 
 	b[np] = (T[npn] + T[npw] + T[npnw]) / 3.0;
 
@@ -789,10 +773,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 
 	b[np] = (T[nps] + T[npe] + T[npse]) / 3.0;
 
@@ -806,10 +790,10 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 	for (k = 0; k <= 9 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 9 + k] = 0.0;
 	}
 
-	a[np][4] = 1.0;
+	a[np * 9 + 4] = 1.0;
 
 	b[np] = (T[nps] + T[npw] + T[npsw]) / 3.0;
 
@@ -819,11 +803,9 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 	return result;
 }
 
-coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* betan, double* gamman, double* Uce, double* Vcw, double* p, double** a, double* b)
+coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* betan, double* gamman, double* Uce, double* Vcw, double* p, double* a, double* b)
 {
-	// Calculates the coefficients and source of the linear system of the pressure deviation for the fictitious volumes based on the boundary conditions
-	//double** a(nx*ny, std::vector<double>(5));
-	//double* b(nx*ny);
+	// Calculates the coefficients and source of the linear system of the pressure deviation for the fictitious volumes based on the boundary conditions.
 
 	// Auxiliary variables
 	int i;
@@ -859,12 +841,12 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	for (k = 0; k <= 5 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 5 + k] = 0.0;
 	}
 
-	a[np][2] = 1.0;
+	a[np * 5 + 2] = 1.0;
 
-	a[np][3] = -1.0;
+	a[np * 5 + 3] = -1.0;
 
 	pe = (-p[npnne] + 4.0 * p[npne] - 3.0 * p[npe]) / 2.0;
 
@@ -881,12 +863,12 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 		for (k = 0; k <= 5 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 5 + k] = 0.0;
 		}
 
-		a[np][2] = 1.0;
+		a[np * 5 + 2] = 1.0;
 
-		a[np][3] = -1.0;
+		a[np * 5 + 3] = -1.0;
 
 		pe = (p[npne] - p[npse]) / 2.0;
 
@@ -903,12 +885,12 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	for (k = 0; k <= 5 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 5 + k] = 0.0;
 	}
 
-	a[np][2] = 1.0;
+	a[np * 5 + 2] = 1.0;
 
-	a[np][3] = -1.0;
+	a[np * 5 + 3] = -1.0;
 
 	pe = (3.0 * p[npe] - 4.0 * p[npse] + p[npsse]) / 2.0;
 
@@ -927,10 +909,10 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	for (k = 0; k <= 5 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 5 + k] = 0.0;
 	}
-	a[np][1] = -1.0;
-	a[np][2] = 1.0;
+	a[np * 5 + 1] = -1.0;
+	a[np * 5 + 2] = 1.0;
 
 	pe = (-p[npnnw] + 4.0 * p[npnw] - 3.0 * p[npw]) / 2.0;
 
@@ -948,10 +930,10 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 		for (k = 0; k <= 5 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 5 + k] = 0.0;
 		}
-		a[np][1] = -1.0;
-		a[np][2] = 1.0;
+		a[np * 5 + 1] = -1.0;
+		a[np * 5 + 2] = 1.0;
 
 		pe = (p[npnw] - p[npsw]) / 2.0;
 
@@ -968,10 +950,10 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	for (k = 0; k <= 5 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 5 + k] = 0.0;
 	}
-	a[np][1] = -1.0;
-	a[np][2] = 1.0;
+	a[np * 5 + 1] = -1.0;
+	a[np * 5 + 2] = 1.0;
 
 	pe = (3.0 * p[npw] - 4.0 * p[npsw] + p[npssw]) / 2.0;
 
@@ -989,12 +971,12 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	for (k = 0; k <= 5 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 5 + k] = 0.0;
 	}
 
-	a[np][2] = 1.0;
+	a[np * 5 + 2] = 1.0;
 
-	a[np][4] = -1.0;
+	a[np * 5 + 4] = -1.0;
 
 	pk = (-p[npnee] + 4.0 * p[npne] - 3.0 * p[npn]) / 2.0;
 
@@ -1009,12 +991,12 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 		for (k = 0; k <= 5 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 5 + k] = 0.0;
 		}
 
-		a[np][2] = 1.0;
+		a[np * 5 + 2] = 1.0;
 
-		a[np][4] = -1.0;
+		a[np * 5 + 4] = -1.0;
 
 		pk = (p[npne] - p[npnw]) / 2.0;
 
@@ -1030,12 +1012,12 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	for (k = 0; k <= 5 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 5 + k] = 0.0;
 	}
 
-	a[np][2] = 1.0;
+	a[np * 5 + 2] = 1.0;
 
-	a[np][4] = -1.0;
+	a[np * 5 + 4] = -1.0;
 
 	pk = (3.0 * p[npn] - 4.0 * p[npnw] + p[npnww]) / 2.0;
 
@@ -1052,12 +1034,12 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 		for (k = 0; k <= 5 - 1; k += 1)
 		{
-			a[np][k] = 0.0;
+			a[np * 5 + k] = 0.0;
 		}
 
-		a[np][2] = 1.0;
+		a[np * 5 + 2] = 1.0;
 
-		a[np][0] = 1.0;
+		a[np * 5 + 0] = 1.0;
 
 		b[np] = 0.0;
 	}
@@ -1075,10 +1057,10 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	for (k = 0; k <= 5 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 5 + k] = 0.0;
 	}
 
-	a[np][2] = 1.0;
+	a[np * 5 + 2] = 1.0;
 
 	b[np] = 0.0;
 
@@ -1093,10 +1075,10 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	for (k = 0; k <= 5 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 5 + k] = 0.0;
 	}
 
-	a[np][2] = 1.0;
+	a[np * 5 + 2] = 1.0;
 
 	b[np] = 0.0;
 
@@ -1111,10 +1093,10 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	for (k = 0; k <= 5 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 5 + k] = 0.0;
 	}
 
-	a[np][2] = 1.0;
+	a[np * 5 + 2] = 1.0;
 
 	b[np] = 0.0;
 
@@ -1129,10 +1111,10 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	for (k = 0; k <= 5 - 1; k += 1)
 	{
-		a[np][k] = 0.0;
+		a[np * 5 + k] = 0.0;
 	}
 
-	a[np][2] = 1.0;
+	a[np * 5 + 2] = 1.0;
 
 	b[np] = 0.0;
 
@@ -1144,7 +1126,7 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 double* get_Vcw(int nx, int ny, double* xe, double* xk, double* ue, double* ve, double* Vcw)
 {
-	// Calculates the contravariant velocity V on the west face of the fictitious volumes of the east boundary
+	// Calculates the contravariant velocity V on the west face of the fictitious volumes of the east boundary.
 
 	//Inner variables
 	int i;
@@ -1715,14 +1697,6 @@ velocity_face get_velocities_at_boundary_faces(int nx, int ny, double UF, double
 {
 	// Calculates the velocities at boundary faces based on the boundary conditions.
 
-	// Variables
-	//double* ue(nx*ny);
-	//double* ve(nx*ny);
-	//double* un(nx*ny);
-	//double* vn(nx*ny);
-	//double* Uce(nx*ny);
-	//double* Vcnb(nx*ny);
-
 	// Axuliary variables
 	int i, j, np, npe, npn;
 	double aux;
@@ -1808,43 +1782,8 @@ initial_conditions get_initial_conditions(int nx, int ny, double PF, double TF, 
 	int i, j, np;
 	double ROF = PF / (Rg * TF);			// Free stream density
 
-	// Variables
-	//double UF = MF * sqrt(GF * Rg * TF);	// Free-stream speed
-	//double* p;
-	//double* pl;
-	//double* T;
-	//double* ro;
-	//double* roe;
-	//double* ron;
-	//double* u;
-	//double* v;
-	//double* ue;
-	//double* ve;
-	//double* un;
-	//double* vn;
-	//double* Uce;
-	//double* Vcn;
-	//double* Vcw;
-
-	//p = new double[nx*ny];
-	//pl = new double[nx*ny]();
-	//T = new double[nx*ny];
-	//ro = new double[nx*ny];
-	//roe = new double[nx*ny];
-	//ron = new double[nx*ny];
-	//u = new double[nx*ny];
-	//v = new double[nx*ny]();
-	//ue = new double[nx*ny];
-	//ve = new double[nx*ny]();
-	//un = new double[nx*ny];
-	//vn = new double[nx*ny]();
-	//Uce = new double[nx*ny];
-	//Vcn = new double[nx*ny];
-	//Vcw = new double[ny]();
-
 	UF = MF * sqrt(GF * Rg * TF);
 
-	//std::fill_n(p, nx*ny, init);
 	for (i = 0; i < nx*ny; i++)
 	{
 		p[i] = PF;

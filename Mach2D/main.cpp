@@ -56,11 +56,6 @@ int main()
 	betae = grid_metrics.metric_tensor.betae;
 	betan = grid_metrics.metric_tensor.betan;
 
-	//for (i = 0; i < nx * ny; i++)
-	//{
-	//	std::cout << i +1 << " " << std::scientific << std::setprecision(14) << Jp[i] << " " << betan[i] << std::endl;
-	//}
-
 	// All the radii are equal 1 if planar flow is choose. If axisymmetric flow, radii are calculated	OK
 	radius grid_radius = get_radius(coord, nx, ny, y, yp, re, rn, rp);
 	rp = grid_radius.rp;

@@ -198,9 +198,7 @@ double get_gp_ratio(int n, double r)
 
 		if (it > 10000)
 		{
-			//printf("get_gp_ratio: Maximum number of iteractions was exceeded.");
 			std::cout << "get_gp_ratio: Maximum number of iteractions was exceeded." << std::endl;
-
 			exit(0);
 		}
 
@@ -216,14 +214,11 @@ coordinates get_real_centroids_xy(int opt, int nx, int ny, double* x, double* y,
 	// There are two options: (opt = 1) a simple mean and (opt = 2) a weighted mean.
 	
 	// Centroids of real volumes
-	//double* xp;
-	//double* yp;
+	//xp;
+	//yp;
 
 	int i, j, np, nps, npw, npsw;
 	double A1, A2;
-
-	//xp = new double[nx*ny]();
-	//yp = new double[nx*ny]();
 
 	if (opt == 1) // Simple mean
 	{
@@ -287,41 +282,24 @@ metrics get_metrics(int nx, int ny, double* x, double* y, double* xp, double* yp
 	double* Jp, double* Je, double* Jn, double* alphae, double* gamman, double* betae, double* betan)
 {
 	// Calculates the metrics, jacobians and components of the metric tensor.
-	//double* xe;     // x_eta at the center of east face of volume P (m)
-	//double* ye;     // y_eta at the center of east face of volume P (m)
-	//double* xen;    // x_eta at the center of north face of volume P (m)
-	//double* yen;    // y_eta at the center of north face of volume P (m)
-	//double* xk;     // x_csi at the center of north face  of volume P (m)
-	//double* yk;     // y_csi at the center of north face of volume P (m)
-	//double* xke;    // x_csi at the center of east face of volume P (m)
-	//double* yke;    // y_csi at the center of east face of volume P (m)
-	//double* Jp;     // Jacobian at the center of volume P (1/m2)
-	//double* Je;     // Jacobian at the center of east face of volume P (1/m2)
-	//double* Jn;     // Jacobian at the center of north face of volume P (1/m2)
-	//double* alphae; // (metric tensor component) alpha at the center of east face of volume P (m2)
-	//double* gamman; // (metric tensor component) gamma at the center of north face of volume P (m2)
-	//double* betae;  // (metric tensor component) beta  at the center of east face of volume P (m2)
-	//double* betan;  // (metric tensor component) beta  at the center of north face of volume P (m2)
+	//xe - x_eta at the center of east face of volume P (m)
+	//ye - y_eta at the center of east face of volume P (m)
+	//xen - x_eta at the center of north face of volume P (m)
+	//yen - y_eta at the center of north face of volume P (m)
+	//xk - x_csi at the center of north face  of volume P (m)
+	//yk - y_csi at the center of north face of volume P (m)
+	//xke - x_csi at the center of east face of volume P (m)
+	//yke - y_csi at the center of east face of volume P (m)
+	//Jp - Jacobian at the center of volume P (1/m2)
+	//Je - Jacobian at the center of east face of volume P (1/m2)
+	//Jn - Jacobian at the center of north face of volume P (1/m2)
+	//alphae - (metric tensor component) alpha at the center of east face of volume P (m2)
+	//gamman -(metric tensor component) gamma at the center of north face of volume P (m2)
+	//betae - (metric tensor component) beta  at the center of east face of volume P (m2)
+	//betan -(metric tensor component) beta  at the center of north face of volume P (m2)
 
 	int i, j, npsw, nps, npw, np, npe, npn;
 	double fw, fe, fs, fn, xkp, xep, ykp, yep;
-
-	// Initializatiog
-	//xe = new double[nx*ny]();
-	//ye = new double[nx*ny]();
-	//xen = new double[nx*ny]();
-	//yen = new double[nx*ny]();
-	//xk = new double[nx*ny]();
-	//yk = new double[nx*ny]();
-	//xke = new double[nx*ny]();
-	//yke = new double[nx*ny]();
-	//Jp = new double[nx*ny]();
-	//Je = new double[nx*ny]();
-	//Jn = new double[nx*ny]();
-	//alphae = new double[nx*ny]();
-	//gamman = new double[nx*ny]();
-	//betae = new double[nx*ny]();
-	//betan = new double[nx*ny]();
 
 	// Derivatives relatively to eta at the center of the east face
 	for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
@@ -548,16 +526,12 @@ radius get_radius(int coord, int nx, int ny, double* y, double* yp, double* re, 
 	//coord = Kind of coord. system ( 1=cylindrical, 0 = cartesian)
 
 	// Cartesian coordinate system
-	//double* re;	// Radius at the center of east face of volume P (m)
-	//double* rn;	// Radius at the center of north face of volume P (m)
-	//double* rp;	// Radius at the center of volume P (m)
+	//re - Radius at the center of east face of volume P (m)
+	//rn - Radius at the center of north face of volume P (m)
+	//rp - Radius at the center of volume P (m)
 
 	int i, j, np, npe, npw, npn, nps, npsw, npse, npnw, npne;
 
-	// Initializating
-	//re = new double[nx*ny];
-	//rn = new double[nx*ny];
-	//rp = new double[nx*ny];
 	for (int i = 0; i < nx*ny; i++)
 	{
 		re[i] = 1.0;

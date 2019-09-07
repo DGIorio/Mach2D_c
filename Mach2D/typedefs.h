@@ -78,7 +78,7 @@ struct velocity
 
 struct coeffs_source
 {
-	double** a;
+	double* a;
 	double* b;
 };
 
@@ -118,8 +118,8 @@ struct initial_conditions
 
 struct diagonal_matrix
 {
-	double** lower;
-	double** upper;
+	double* lower;
+	double* upper;
 };
 
 struct interpolation

@@ -3,10 +3,10 @@
 double* get_newton_interpolation_coefficients(int n, double* xn, double* fn, double* c)
 {
 	// Calculates the coefficients of the newtonian interpolation
-	// n:  Degree of the interpolatory polynomial
-	// xn: x nodes
-	// fn: f(x)
-	// c: Coefficients of the interpolation
+	// n  -  Degree of the interpolatory polynomial
+	// xn - x nodes
+	// fn - f(x)
+	// c  - Coefficients of the interpolation
 
 	// Auxiliary variables
 	int i, j;
@@ -51,10 +51,10 @@ double* get_newton_interpolation_coefficients(int n, double* xn, double* fn, dou
 double get_newton_interpolation_f0(int n, double x, double* xn, double* c)
 {
 	// Calculates the value of the polynomial at a specified point x.
-	// n:  Degree of the interpolatory polynomial
-	// x:  Value of x where the interpolation will be carried out
-	// xn: x nodes
-	// c:  Coefficients of the interpolation
+	// n  -  Degree of the interpolatory polynomial
+	// x  -  Value of x where the interpolation will be carried out
+	// xn - x nodes
+	// c  -  Coefficients of the interpolation
 	double get_newton_interpolation_f0;
 
 	// Auxiliary variables
@@ -80,10 +80,10 @@ double get_newton_interpolation_f0(int n, double x, double* xn, double* c)
 double get_newton_interpolation_f1(int n, double x, double* xn, double* c)
 {
 	// Calculates the value of the polynomial first derivative at a specified point x.
-	// n:  Degree of the interpolatory polynomial
-	// x:  Value of x where the interpolation will be carried out
-	// xn: x nodes
-	// c:  Coefficients of the interpolation
+	// n  -  Degree of the interpolatory polynomial
+	// x  -  Value of x where the interpolation will be carried out
+	// xn - x nodes
+	// c  -  Coefficients of the interpolation
 	double get_newton_interpolation_f1;
 
 	// Auxiliary variables
@@ -121,18 +121,18 @@ interpolation get_ni_f0_vec_d1(int n, double* xn, double* fn, double xc)
 	// polynomial is performed based on xn and fn. Depending on the results, the variable res
 	// returns: res = 1, meaning "no problems found", res = -1, meaning "out of range", and
 	// res = -2, meaning "error".
-	// n:  Number of nodes in the vector xn
-	// xn: Vector of the nodes
-	// fn: Vector of f(xn)
-	// xc: Value of x where the interpolation must be done
+	// n  -  Number of nodes in the vector xn
+	// xn - Vector of the nodes
+	// fn - Vector of f(xn)
+	// xc - Value of x where the interpolation must be done
 	double fc;	// Interpolation of f(xc)
 	int res;	// Status of the result
 
 	// Auxiliary variables
-	int kc; // Index for xc
+	int kc;		// Index for xc
 	double* xl;	// Local values of xn
 	double* fl;	// Local values of fn
-	double* c;		// Coefficients of the newtonian interpolation
+	double* c;	// Coefficients of the newtonian interpolation
 
 	// Initializating
 	xl = new double[1 + 1];
@@ -163,10 +163,7 @@ interpolation get_ni_f0_vec_d1(int n, double* xn, double* fn, double xc)
 		result.status = res;
 		return result;
 	}
-	// new_vector.assign(old_vector.begin(),old_vector.end()); // Method 1
-	// new_vector = old_vector; // Method 2, if they have the same size
-	//xl.assign(xn.at(kc), xn.at(kc + 1));
-	//fl.assign(fn.at(kc), fn.at(kc + 1));
+
 	memcpy(xl, xn + kc, (kc+1) * sizeof(double));							// VERIFY
 	memcpy(fl, fn + kc, (kc + 1) * sizeof(double));
 
@@ -195,19 +192,19 @@ interpolation get_ni_f0_vec_d2(int n, double* xn, double* fn, double xc)
 	// polynomial is performed based on xn and fn. Depending on the results, the variable res
 	// returns: res = 1, meaning "no problems found", res = -1, meaning "out of range", and
 	// res = -2, meaning "error".
-	// n:  Number of nodes in the vector xn
-	// xn: Vector of the nodes
-	// fn: Vector of f(xn)
-	// xc: Value of x where the interpolation must be done
+	// n  -  Number of nodes in the vector xn
+	// xn - Vector of the nodes
+	// fn - Vector of f(xn)
+	// xc - Value of x where the interpolation must be done
 	double fc;	// Interpolation of f(xc)
 	int res;	// Status of the result
 
 	// Auxiliary variables
-	int kc; // Index for xc
+	int kc;		 // Index for xc
 
 	double* xl; // Local values of xn
 	double* fl; // Local values of fn
-	double* c; // Coefficients of the newtonian interpolation
+	double* c;	// Coefficients of the newtonian interpolation
 
 	// Initializating
 	xl = new double[2 + 1];
@@ -241,8 +238,6 @@ interpolation get_ni_f0_vec_d2(int n, double* xn, double* fn, double xc)
 
 	if (kc == 0)
 	{
-		//xl.assign(xn.at(kc), xn.at(kc + 2));
-		//fl.assign(fn.at(kc), fn.at(kc + 2));
 		memcpy(xl, xn + kc, (kc + 2) * sizeof(double));
 		memcpy(fl, fn + kc, (kc + 2) * sizeof(double));
 
@@ -252,8 +247,6 @@ interpolation get_ni_f0_vec_d2(int n, double* xn, double* fn, double xc)
 	}
 	else if (kc == n - 1 - 1)
 	{
-		//xl.assign(xn.at(kc - 1), xn.at(kc + 1));
-		//fl.assign(fn.at(kc - 1), fn.at(kc + 1));
 		memcpy(xl, xn + kc - 1, (kc + 1) * sizeof(double));
 		memcpy(fl, fn + kc - 1, (kc + 1) * sizeof(double));
 
@@ -265,8 +258,6 @@ interpolation get_ni_f0_vec_d2(int n, double* xn, double* fn, double xc)
 	{
 		if (std::fabs(xc - xn[kc]) < std::fabs(xc - xn[kc + 1]))
 		{
-			//xl.assign(xn.at(kc - 1), xn.at(kc + 1));
-			//fl.assign(fn.at(kc - 1), fn.at(kc + 1));
 			memcpy(xl, xn + kc - 1, (kc + 1) * sizeof(double));
 			memcpy(fl, fn + kc - 1, (kc + 1) * sizeof(double));
 
@@ -276,8 +267,6 @@ interpolation get_ni_f0_vec_d2(int n, double* xn, double* fn, double xc)
 		}
 		else
 		{
-			//xl.assign(xn.at(kc), xn.at(kc + 2));
-			//fl.assign(fn.at(kc), fn.at(kc + 2));
 			memcpy(xl, xn + kc, (kc + 2) * sizeof(double));
 			memcpy(fl, fn + kc, (kc + 2) * sizeof(double));
 
@@ -306,16 +295,14 @@ int searcher(int n, double* x, double xc)
 	// kc is the index in the vector x such that x(kc) <= xc <= x(kc+1), else
 	// kc = -1 if xc is out of [x(1),x(n)] and
 	// kc = -2 if an error was found.
-	// n:  Number of nodes
-	// x:  Vector of independent variable
-	// xc: Value of x to be found
+	// n  -  Number of nodes
+	// x  -  Vector of independent variable
+	// xc - Value of x to be found
 	int kc;	// Index in the vector such that x(kc) <= xc <= x(kc+1)
 
 	// Auxiliary variables
 	int i, ki, km, kf;
 
-	//ki = 1;
-	//kf = n;
 	ki = 1 - 1;
 	kf = n - 1;
 

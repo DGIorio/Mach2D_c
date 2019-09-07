@@ -90,14 +90,15 @@ double* dvn; //< SIMPLEC coefficients for vn (m2.s/kg)
 double* de;  //< SIMPLEC coefficients for Uce (m3.s/kg)
 double* dn;  //< SIMPLEC coefficients for Vcn (m3.s/kg)
 
-double** au;  //< Coefficients of the linear system for u (kg/s)
-double** av;  //< Coefficients of the linear system for v (kg/s)
-double** at;  //< Coefficients of the linear system for T (J/(K.s))
-double** ap;  //< Coefficients of the linear system for pl (m.s)
-double** dl9; //< Lower matrix of the MSI method for 9 diagonals
-double** du9; //< Upper matrix of the MSI method for 9 diagonals
-double** dl5; //< Lower matrix of the MSI method for 5 diagonals
-double** du5; //< Upper matrix of the MSI method for 5 diagonals
+// Flattened 2D arrays (2D to 1D)
+double* au;  //< Coefficients of the linear system for u (kg/s)
+double* av;  //< Coefficients of the linear system for v (kg/s)
+double* at;  //< Coefficients of the linear system for T (J/(K.s))
+double* ap;  //< Coefficients of the linear system for pl (m.s)
+double* dl9; //< Lower matrix of the MSI method for 9 diagonals
+double* du9; //< Upper matrix of the MSI method for 9 diagonals
+double* dl5; //< Lower matrix of the MSI method for 5 diagonals
+double* du5; //< Upper matrix of the MSI method for 5 diagonals
 
 // GEOMETRIC PARAMETERS
 double lr;  //< length of the body (m)
@@ -406,28 +407,14 @@ void allocate_initialize_variables()
 	w = new double[nxy];
 	z = new double[nxy];
 
-	// Vectors of vectors: reserve/resize just on inner dimension
-	// VERIFY, check if replaces the global vars
-	au  = new double*[nxy];
-	av  = new double*[nxy];
-	at  = new double*[nxy];
-	ap  = new double*[nxy];
-	dl9 = new double*[nxy];
-	du9 = new double*[nxy];
-	dl5 = new double*[nxy];
-	du5 = new double*[nxy];
-
-	for (int i = 0; i < nxy; i++)
-	{
-		au[i]  = new double[9];
-		av[i]  = new double[9];
-		at[i]  = new double[9];
-		ap[i]  = new double[9];
-		dl9[i] = new double[5];
-		du9[i] = new double[4];
-		dl5[i] = new double[4];
-		du5[i] = new double[3];
-	}
+	au = new double[nxy * 9];
+	av = new double[nxy * 9];
+	at = new double[nxy * 9];
+	ap = new double[nxy * 5];
+	dl9 = new double[nxy * 5];
+	du9 = new double[nxy * 4];
+	dl5 = new double[nxy * 4];
+	du5 = new double[nxy * 3];
 }
 
 void CreateFolder(std::string path)

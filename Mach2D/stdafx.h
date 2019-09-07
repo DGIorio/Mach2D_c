@@ -13,7 +13,6 @@
 #include <windows.h>
 #include <stdio.h>
 #include <math.h>
-#include <chrono>		//measure time
 
 #include "typedefs.h"
 #include "main.h"
@@ -115,14 +114,14 @@ extern double* dvn;
 extern double* de;
 extern double* dn;
 
-extern double** au;
-extern double** av;
-extern double** at;
-extern double** ap;
-extern double** dl9;
-extern double** du9;
-extern double** dl5;
-extern double** du5;
+extern double* au;
+extern double* av;
+extern double* at;
+extern double* ap;
+extern double* dl9;
+extern double* du9;
+extern double* dl5;
+extern double* du5;
 
 extern double lr;
 extern double rb;

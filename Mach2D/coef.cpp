@@ -7,8 +7,7 @@ double* get_density_at_nodes(int nx, int ny, double Rg, double* p, double* T, do
 {
 	// Calculates the specific mass at nodes using p, T and the state equation.
 	
-	//double* ro;	// Specific mass (absolute density) at center of volume P (kg/m3);
-	//ro = new double[nx*ny];
+	//ro: Specific mass (absolute density) at center of volume P (kg/m3);
 
 	// Auxiliary variables
 	int i;
@@ -25,15 +24,12 @@ specific_mass get_density_at_faces(int nx, int ny, double beta, double* ro, doub
 	// Interpolates the specific mass at center of volume faces using the specific mass at nodes
 	// based on the scheme UDS with deferred correction to CDS.
 
-	//double* roe;	// Specific mass at east face of volume P (kg/m3);
-	//double* ron;	// Specific mass at north face of volume P (kg/m3);
+	//roe: Specific mass at east face of volume P (kg/m3);
+	//ron: Specific mass at north face of volume P (kg/m3);
 
 	// Auxiliary variables
 	int i, j, np, npe, npn;
 	double ae, an;				// Coefficients of UDS scheme
-
-	//roe = new double[nx*ny];
-	//ron = new double[nx*ny];
 
 	// Density at east face
 	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
@@ -66,23 +62,16 @@ specific_mass get_density_at_faces(int nx, int ny, double beta, double* ro, doub
 	return result;
 }
 
-double** get_u_coefficients(int nx, int ny, double dt, double* rp, double* re, double* rn, double* Jp, double* roe, double* ron, double* roa, double* Uce, double* Vcn, double** a)
+double* get_u_coefficients(int nx, int ny, double dt, double* rp, double* re, double* rn, double* Jp, double* roe, double* ron, double* roa, double* Uce, double* Vcn, double* a)
 {
 	// Calculates the coefficients of the linear system for u for the real volumes.
 
-	//double** a;   // Coefficients of the linear system for u (kg/s);
+	//a: Coefficients of the linear system for u (kg/s);
 
 	// Auxiliary variables
 	int i, j, np, nps, npw;
 	double fmw, fme, fms, fmn, mpa;
 	double ae, aw, an, as;
-
-	// Initializating
-	//a = new double*[nx*ny];
-	//for (i = 0; i < nx*ny; i++)
-	//{
-	//	a[i] = new double[9];
-	//}
 
 	// Contribution to the coefficients due to the advection term
 	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
@@ -105,17 +94,17 @@ double** get_u_coefficients(int nx, int ny, double dt, double* rp, double* re, d
 			aw = 0.5*sign(Uce[npw]);
 			ae = 0.5*sign(Uce[np]);
 
-			a[np][0] = 0.0; // SW
-			a[np][2] = 0.0; // SE
-			a[np][6] = 0.0; // NW
-			a[np][8] = 0.0; // NE
+			a[np * 9 + 0] = 0.0; // SW
+			a[np * 9 + 2] = 0.0; // SE
+			a[np * 9 + 6] = 0.0; // NW
+			a[np * 9 + 8] = 0.0; // NE
 
-			a[np][1] = -fms * (0.5 + as); // S
-			a[np][3] = -fmw * (0.5 + aw); // W
-			a[np][5] = fme * (0.5 - ae);  // E
-			a[np][7] = fmn * (0.5 - an);  // N
+			a[np * 9 + 1] = -fms * (0.5 + as); // S
+			a[np * 9 + 3] = -fmw * (0.5 + aw); // W
+			a[np * 9 + 5] = fme * (0.5 - ae);  // E
+			a[np * 9 + 7] = fmn * (0.5 - an);  // N
 
-			a[np][4] = mpa / dt - (a[np][7] + a[np][1] + a[np][3] + a[np][5]);
+			a[np * 9 + 4] = mpa / dt - (a[np * 9 + 7] + a[np * 9 + 1] + a[np * 9 + 3] + a[np * 9 + 5]);
 		}
 	}
 	return a;
@@ -125,17 +114,13 @@ source_correction get_u_source(int nx, int ny, double beta, double dt, double* r
 {
 	// Calculates the source of the linear system for u for the real volumes.
 
-	//double* cup;		// Term of deferred correction for u (N);
-	//double* b;			// Source of the linear system for u (N);
+	//cup: Term of deferred correction for u (N);
+	//b: Source of the linear system for u (N);
 
 	// Auxiliary variables
 	int i, j, np, nps, npn, npw, npe;
 	double fmw, fme, fmn, fms, mpa;
 	double as, an, aw, ae;
-
-	// Initializating
-	//cup = new double[nx*ny];
-	//b = new double[nx*ny];
 
 	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
 	{
@@ -187,23 +172,16 @@ source_correction get_u_source(int nx, int ny, double beta, double dt, double* r
 	return result;
 }
 
-double** get_v_coefficients(int nx, int ny, double dt, double* rp, double* re, double* rn, double* Jp, double* roe, double* ron, double* roa, double* Uce, double* Vcn, double** a)
+double* get_v_coefficients(int nx, int ny, double dt, double* rp, double* re, double* rn, double* Jp, double* roe, double* ron, double* roa, double* Uce, double* Vcn, double* a)
 {
 	// Calculates the coefficients of the linear system for v  for the real volumes.
 
-	//double** a;		// Coefficients of the linear system for v (kg/s);
+	//a: Coefficients of the linear system for v (kg/s);
 
 	// Auxiliary variables
 	int i, j, np, nps, npw;
 	double fmw, fme, fms, fmn, mpa;
 	double ae, aw, an, as;
-
-	// Initializating
-	//a = new double*[nx*ny];
-	//for (i = 0; i < nx*ny; i++)
-	//{
-	//	a[i] = new double[9];
-	//}
 
 	// Contribution to the coefficients due to the advection term
 	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
@@ -226,17 +204,17 @@ double** get_v_coefficients(int nx, int ny, double dt, double* rp, double* re, d
 			aw = 0.5*sign(Uce[npw]);
 			ae = 0.5*sign(Uce[np]);
 
-			a[np][0] = 0.0; // SW
-			a[np][2] = 0.0; // SE
-			a[np][6] = 0.0; // NW
-			a[np][8] = 0.0; // NE
+			a[np * 9 + 0] = 0.0; // SW
+			a[np * 9 + 2] = 0.0; // SE
+			a[np * 9 + 6] = 0.0; // NW
+			a[np * 9 + 8] = 0.0; // NE
 
-			a[np][1] = -fms * (0.5 + as); // S
-			a[np][3] = -fmw * (0.5 + aw); // W
-			a[np][5] = fme * (0.5 - ae);  // E
-			a[np][7] = fmn * (0.5 - an);  // N
+			a[np * 9 + 1] = -fms * (0.5 + as); // S
+			a[np * 9 + 3] = -fmw * (0.5 + aw); // W
+			a[np * 9 + 5] = fme * (0.5 - ae);  // E
+			a[np * 9 + 7] = fmn * (0.5 - an);  // N
 
-			a[np][4] = mpa / dt - (a[np][7] + a[np][1] + a[np][3] + a[np][5]);
+			a[np * 9 + 4] = mpa / dt - (a[np * 9 + 7] + a[np * 9 + 1] + a[np * 9 + 3] + a[np * 9 + 5]);
 		}
 	}
 	return a;
@@ -246,17 +224,13 @@ source_correction get_v_source(int nx, int ny, double beta, double dt, double* r
 {
 	// Calculates the source of the linear system for v for the real volumes.
 
-	//double* cvp;		// Term of deferred correction for v (N);
-	//double* b;			// Source of the linear system for v (N);
+	//cvp: Term of deferred correction for v (N);
+	//b: Source of the linear system for v (N);
 
 	// Auxiliary variables
 	int i, j, np, nps, npn, npw, npe;
 	double fmw, fme, fmn, fms, mpa;
 	double as, an, aw, ae;
-
-	// Initializating
-	//cvp = new double[nx*ny];
-	//b = new double[nx*ny];
 
 	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
 	{
@@ -308,26 +282,18 @@ source_correction get_v_source(int nx, int ny, double beta, double dt, double* r
 	return result;
 }
 
-coeffs_source get_T_coefficients_and_source(int nx, int ny, double beta, double dt, double* rp, double* re, double* rn, double* xe, double* ye, double* xk, double* yk, double* Jp, double* roe, double* ron, double* roa, double* p, double* pa, double* cp, double* Uce, double* Vcn, double* u, double* v, double* T, double* Ta, double** a, double* b)
+coeffs_source get_T_coefficients_and_source(int nx, int ny, double beta, double dt, double* rp, double* re, double* rn, double* xe, double* ye, double* xk, double* yk, double* Jp, double* roe, double* ron, double* roa, double* p, double* pa, double* cp, double* Uce, double* Vcn, double* u, double* v, double* T, double* Ta, double* a, double* b)
 {
 	// Calculates the coefficients and source of the linear system for T for the real volumes.
 
-	//double** a;		// Coefficients of the linear system for T (J/(K.s))
-	//double* b;		// Source of the linear system for T (J/s)
+	//a: Coefficients of the linear system for T (J/(K.s))
+	//b: Source of the linear system for T (J/s)
 
 	// Auxiliary variables
 	int i, j;
 	int np, nps, npn, npw, npe;
 	double fmw, fme, fms, fmn, mpa, pup, pvp;
 	double as, an, aw, ae;
-
-	// Initializating
-	//b = new double[nx*ny];
-	//a = new double*[nx*ny];
-	//for (i = 0; i < nx*ny; i++)
-	//{
-	//	a[i] = new double[9];
-	//}
 
 	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
 	{
@@ -352,17 +318,17 @@ coeffs_source get_T_coefficients_and_source(int nx, int ny, double beta, double 
 			ae = 0.5*sign(Uce[np]);
 
 			// Contribution to the COEFFICIENTS due to advection (UDS)
-			a[np][0] = 0.0; // SW
-			a[np][2] = 0.0; // SE
-			a[np][6] = 0.0; // NW
-			a[np][8] = 0.0; // NE
+			a[np * 9 + 0] = 0.0; // SW
+			a[np * 9 + 2] = 0.0; // SE
+			a[np * 9 + 6] = 0.0; // NW
+			a[np * 9 + 8] = 0.0; // NE
 
-			a[np][1] = -fms * (0.5 + as) * cp[np]; // S
-			a[np][3] = -fmw * (0.5 + aw) * cp[np]; // W
-			a[np][5] = fme * (0.5 - ae) * cp[np];  // E
-			a[np][7] = fmn * (0.5 - an) * cp[np];  // N
+			a[np * 9 + 1] = -fms * (0.5 + as) * cp[np]; // S
+			a[np * 9 + 3] = -fmw * (0.5 + aw) * cp[np]; // W
+			a[np * 9 + 5] = fme * (0.5 - ae) * cp[np];  // E
+			a[np * 9 + 7] = fmn * (0.5 - an) * cp[np];  // N
 
-			a[np][4] = mpa * cp[np] / dt - (a[np][7] + a[np][1] + a[np][3] + a[np][5]);
+			a[np * 9 + 4] = mpa * cp[np] / dt - (a[np * 9 + 7] + a[np * 9 + 1] + a[np * 9 + 3] + a[np * 9 + 5]);
 
 			// Contribution to the SOURCE due to advection (UDS)
 			b[np] = mpa * Ta[np] * cp[np] / dt;
@@ -400,26 +366,19 @@ coeffs_source get_T_coefficients_and_source(int nx, int ny, double beta, double 
 	return result;
 }
 
-double** get_p_coefficients(int nx, int ny, double dt, double* rp, double* re, double* rn, double* Jp, double* Uce, double* Vcn, double* roe, double* ron, double* g, double* de, double* dn, double** a)
+double* get_p_coefficients(int nx, int ny, double dt, double* rp, double* re, double* rn, double* Jp, double* Uce, double* Vcn, double* roe, double* ron, double* g, double* de, double* dn, double* a)
 {
 	// Calculates the coefficients of the linear system for pressure correction
 	// g, ro, Uce and Vcn used in this subroutine are those calculated in the previous iteraction
 	// de and dn must be calculated with the coef. of the linear sytem for u and v from which
 	// u* and v* are obtained.
 
-	//double** a;			// Coefficients of the linear system for pl (m.s)
+	//a: Coefficients of the linear system for pl (m.s)
 
 	// Auxiliary variables
 	int i, j, np, nps, npn, npw, npe;
 	double as, an, aw, ae;
 	double roem, rowm, ronm, rosm;
-
-	// Initializating
-	//a = new double*[nx*ny];
-	//for (i = 0; i < nx*ny; i++)
-	//{
-	//	a[i] = new double[5];
-	//}
 
 	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
 	{
@@ -442,13 +401,13 @@ double** get_p_coefficients(int nx, int ny, double dt, double* rp, double* re, d
 			rosm = ron[nps];  // Density on south face
 
 			// South
-			a[np][0] = -rn[nps] * ((0.5 + as) * Vcn[nps] * g[nps] + rosm * dn[nps]);
+			a[np * 5 + 0] = -rn[nps] * ((0.5 + as) * Vcn[nps] * g[nps] + rosm * dn[nps]);
 
 			// West
-			a[np][1] = -re[npw] * ((0.5 + aw) * Uce[npw] * g[npw] + rowm * de[npw]);
+			a[np * 5 + 1] = -re[npw] * ((0.5 + aw) * Uce[npw] * g[npw] + rowm * de[npw]);
 
 			// Center
-			a[np][2] = g[np] * (rp[np] / (Jp[np] * dt)
+			a[np * 5 + 2] = g[np] * (rp[np] / (Jp[np] * dt)
 				+ (0.5 + ae) * re[np] * Uce[np]
 				- (0.5 - aw) * re[npw] * Uce[npw]
 				+ (0.5 + an) * rn[np] * Vcn[np]
@@ -459,10 +418,10 @@ double** get_p_coefficients(int nx, int ny, double dt, double* rp, double* re, d
 				+ rosm * rn[nps] * dn[nps];
 
 			// East
-			a[np][3] = re[np] * ((0.5 - ae) * Uce[np] * g[npe] - roem * de[np]);
+			a[np * 5 + 3] = re[np] * ((0.5 - ae) * Uce[np] * g[npe] - roem * de[np]);
 
 			// North
-			a[np][4] = rn[np] * ((0.5 - an) * Vcn[np] * g[npn] - ronm * dn[np]);
+			a[np * 5 + 4] = rn[np] * ((0.5 - an) * Vcn[np] * g[npn] - ronm * dn[np]);
 		}
 	}
 	return a;
@@ -474,14 +433,11 @@ double* get_p_source(int nx, int ny, double dt, double* rp, double* re, double* 
 	// ro, Uce and Vcn are the incorrect ones (obtained with p*)
 	// rom, Ucem and Vcnm are those of the previous iteraction
 
-	//double* b;			// Source of the linear system for pl (kg/s)
+	//b: Source of the linear system for pl (kg/s)
 
 	// Auxiliary variables
 	int i, j, np, nps, npn, npw, npe;
 	double as, an, aw, ae; // UDS coefficients
-
-	// Initializating
-	//b = new double[nx*ny];
 
 	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
 	{
@@ -514,18 +470,18 @@ double* get_p_source(int nx, int ny, double dt, double* rp, double* re, double* 
 
 velocity_face get_velocities_at_internal_faces(int nx, int ny, double dt, double* rp, double* re, double* rn, double* xe, double* ye, double* xk, double* yk,
 	double* xen, double* yen, double* xke, double* yke, double* Jp, double* cup, double* cvp,
-	double** au, double** av, double* roa, double* p, double* u, double* v, double* uea, double* vea, double* una, double* vna,
+	double* au, double* av, double* roa, double* p, double* u, double* v, double* uea, double* vea, double* una, double* vna,
 	double* ue, double* ve, double* un, double* vn, double* Uce, double* Vcn)
 {
 	// Calculates the velocities at the interfaces between real volumes.
 	// The interpolation scheme applied here is the one appropriate for the SIMPLEC method.
 
-	//double* ue(nx*ny);	// Cartesian velocity u at center of east face of volume P (m/s);
-	//double* ve(nx*ny);	// Cartesian velocity v at center of east face of volume P (m/s);
-	//double* un(nx*ny);	// Cartesian velocity u at center of north face of volume P (m/s);
-	//double* vn(nx*ny);	// Cartesian velocity v at center of north face of volume P (m/s);
-	//double* Uce(nx*ny);	// Contravariant velocity U at east face of volume P (m2/s);
-	//double* Vcn(nx*ny);	// Contravariant velocity V at north face of volume P (m2/s);
+	//ue(nx*ny);	// Cartesian velocity u at center of east face of volume P (m/s);
+	//ve(nx*ny);	// Cartesian velocity v at center of east face of volume P (m/s);
+	//un(nx*ny);	// Cartesian velocity u at center of north face of volume P (m/s);
+	//vn(nx*ny);	// Cartesian velocity v at center of north face of volume P (m/s);
+	//Uce(nx*ny);	// Contravariant velocity U at east face of volume P (m2/s);
+	//Vcn(nx*ny);	// Contravariant velocity V at north face of volume P (m2/s);
 
 	// Auxiliary variables
 	int i, j, np, npsw, npse, nps, npw, npe, npnw, npn, npne;
@@ -556,17 +512,17 @@ velocity_face get_velocities_at_internal_faces(int nx, int ny, double dt, double
 			mpa = roa[np] * rp[np] / Jp[np];
 			mea = roa[npe] * rp[npe] / Jp[npe];
 
-			sumup = au[np][0] * u[npsw] + au[np][1] * u[nps] + au[np][2] * u[npse] + au[np][3] * u[npw]
-				+ au[np][5] * u[npe] + au[np][6] * u[npnw] + au[np][7] * u[npn] + au[np][8] * u[npne];
+			sumup = au[np * 9 + 0] * u[npsw] + au[np * 9 + 1] * u[nps] + au[np * 9 + 2] * u[npse] + au[np * 9 + 3] * u[npw]
+				+ au[np * 9 + 5] * u[npe] + au[np * 9 + 6] * u[npnw] + au[np * 9 + 7] * u[npn] + au[np * 9 + 8] * u[npne];
 
-			sumue = au[npe][0] * u[nps] + au[npe][1] * u[npse] + au[npe][2] * u[npsee] + au[npe][3] * u[np]
-				+ au[npe][5] * u[npee] + au[npe][6] * u[npn] + au[npe][7] * u[npne] + au[npe][8] * u[npnee];
+			sumue = au[npe * 9 + 0] * u[nps] + au[npe * 9 + 1] * u[npse] + au[npe * 9 + 2] * u[npsee] + au[npe * 9 + 3] * u[np]
+				+ au[npe * 9 + 5] * u[npee] + au[npe * 9 + 6] * u[npn] + au[npe * 9 + 7] * u[npne] + au[npe * 9 + 8] * u[npnee];
 
-			sumvp = av[np][0] * v[npsw] + av[np][1] * v[nps] + av[np][2] * v[npse] + av[np][3] * v[npw]
-				+ av[np][5] * v[npe] + av[np][6] * v[npnw] + av[np][7] * v[npn] + av[np][8] * v[npne];
+			sumvp = av[np * 9 + 0] * v[npsw] + av[np * 9 + 1] * v[nps] + av[np * 9 + 2] * v[npse] + av[np * 9 + 3] * v[npw]
+				+ av[np * 9 + 5] * v[npe] + av[np * 9 + 6] * v[npnw] + av[np * 9 + 7] * v[npn] + av[np * 9 + 8] * v[npne];
 
-			sumve = av[npe][0] * v[nps] + av[npe][1] * v[npse] + av[npe][2] * v[npsee] + av[npe][3] * v[np]
-				+ av[npe][5] * v[npee] + av[npe][6] * v[npn] + av[npe][7] * v[npne] + av[npe][8] * v[npnee];
+			sumve = av[npe * 9 + 0] * v[nps] + av[npe * 9 + 1] * v[npse] + av[npe * 9 + 2] * v[npsee] + av[npe * 9 + 3] * v[np]
+				+ av[npe * 9 + 5] * v[npee] + av[npe * 9 + 6] * v[npn] + av[npe * 9 + 7] * v[npne] + av[npe * 9 + 8] * v[npnee];
 
 			aux = (p[npn] + p[npne] - p[nps] - p[npse]) / 4.0;
 
@@ -575,10 +531,10 @@ velocity_face get_velocities_at_internal_faces(int nx, int ny, double dt, double
 			pve = re[np] * (-xke[np] * aux + xe[np] * (p[npe] - p[np]));
 
 			ue[np] = ((mpa + mea) * uea[np] / dt + cup[np] + cup[npe]
-				- sumup - sumue + 2.0 * pue) / (au[np][4] + au[npe][4]);
+				- sumup - sumue + 2.0 * pue) / (au[np * 9 + 4] + au[npe * 9 + 4]);
 
 			ve[np] = ((mpa + mea) * vea[np] / dt + cvp[np] + cvp[npe]
-				- sumvp - sumve + 2.0 * pve) / (av[np][4] + av[npe][4]);
+				- sumvp - sumve + 2.0 * pve) / (av[np * 9 + 4] + av[npe * 9 + 4]);
 
 			Uce[np] = ue[np] * ye[np] - ve[np] * xe[np];
 		}
@@ -606,17 +562,17 @@ velocity_face get_velocities_at_internal_faces(int nx, int ny, double dt, double
 			mpa = roa[np] * rp[np] / Jp[np];
 			mna = roa[npn] * rp[npn] / Jp[npn];
 
-			sumup = au[np][0] * u[npsw] + au[np][1] * u[nps] + au[np][2] * u[npse] + au[np][3] * u[npw]
-				+ au[np][5] * u[npe] + au[np][6] * u[npnw] + au[np][7] * u[npn] + au[np][8] * u[npne];
+			sumup = au[np * 9 + 0] * u[npsw] + au[np * 9 + 1] * u[nps] + au[np * 9 + 2] * u[npse] + au[np * 9 + 3] * u[npw]
+				+ au[np * 9 + 5] * u[npe] + au[np * 9 + 6] * u[npnw] + au[np * 9 + 7] * u[npn] + au[np * 9 + 8] * u[npne];
 
-			sumun = au[npn][0] * u[npw] + au[npn][1] * u[np] + au[npn][2] * u[npe] + au[npn][3] * u[npnw]
-				+ au[npn][5] * u[npne] + au[npn][6] * u[npnnw] + au[npn][7] * u[npnn] + au[npn][8] * u[npnne];
+			sumun = au[npn * 9 + 0] * u[npw] + au[npn * 9 + 1] * u[np] + au[npn * 9 + 2] * u[npe] + au[npn * 9 + 3] * u[npnw]
+				+ au[npn * 9 + 5] * u[npne] + au[npn * 9 + 6] * u[npnnw] + au[npn * 9 + 7] * u[npnn] + au[npn * 9 + 8] * u[npnne];
 
-			sumvp = av[np][0] * v[npsw] + av[np][1] * v[nps] + av[np][2] * v[npse] + av[np][3] * v[npw]
-				+ av[np][5] * v[npe] + av[np][6] * v[npnw] + av[np][7] * v[npn] + av[np][8] * v[npne];
+			sumvp = av[np * 9 + 0] * v[npsw] + av[np * 9 + 1] * v[nps] + av[np * 9 + 2] * v[npse] + av[np * 9 + 3] * v[npw]
+				+ av[np * 9 + 5] * v[npe] + av[np * 9 + 6] * v[npnw] + av[np * 9 + 7] * v[npn] + av[np * 9 + 8] * v[npne];
 
-			sumvn = av[npn][0] * v[npw] + av[npn][1] * v[np] + av[npn][2] * v[npe] + av[npn][3] * v[npnw]
-				+ av[npn][5] * v[npne] + av[npn][6] * v[npnnw] + av[npn][7] * v[npnn] + av[npn][8] * v[npnne];
+			sumvn = av[npn * 9 + 0] * v[npw] + av[npn * 9 + 1] * v[np] + av[npn * 9 + 2] * v[npe] + av[npn * 9 + 3] * v[npnw]
+				+ av[npn * 9 + 5] * v[npne] + av[npn * 9 + 6] * v[npnnw] + av[npn * 9 + 7] * v[npnn] + av[npn * 9 + 8] * v[npnne];
 
 			aux = (p[npne] + p[npe] - p[npnw] - p[npw]) / 4.0;
 
@@ -625,10 +581,10 @@ velocity_face get_velocities_at_internal_faces(int nx, int ny, double dt, double
 			pvn = rn[np] * (xk[np] * (p[np] - p[npn]) + xen[np] * aux);
 
 			un[np] = ((mpa + mna) * una[np] / dt + cup[np] + cup[npn]
-				- sumup - sumun + 2.0 * pun) / (au[np][4] + au[npn][4]);
+				- sumup - sumun + 2.0 * pun) / (au[np * 9 + 4] + au[npn * 9 + 4]);
 
 			vn[np] = ((mpa + mna) * vna[np] / dt + cvp[np] + cvp[npn]
-				- sumvp - sumvn + 2.0 * pvn) / (av[np][4] + av[npn][4]);
+				- sumvp - sumvn + 2.0 * pvn) / (av[np * 9 + 4] + av[npn * 9 + 4]);
 
 			Vcn[np] = vn[np] * xk[np] - un[np] * yk[np];
 		}
@@ -643,17 +599,17 @@ velocity_face get_velocities_at_internal_faces(int nx, int ny, double dt, double
 	return result;
 }
 
-simplec_coeffs get_internal_simplec_coefficients(int nx, int ny, double* re, double* rn, double* xe, double* ye, double* xk, double* yk, double** au, double** av,
+simplec_coeffs get_internal_simplec_coefficients(int nx, int ny, double* re, double* rn, double* xe, double* ye, double* xk, double* yk, double* au, double* av,
 	double* due, double* dve, double* dun, double* dvn, double* de, double* dn)
 {
 	// Calculates SIMPLEC coefficients at the interface between real volumes.
 
-	//double* due;	  // SIMPLEC coefficients for ue (m2.s/kg);
-	//double* dve;	  // SIMPLEC coefficients for ve (m2.s/kg);
-	//double* dun;	  // SIMPLEC coefficients for un (m2.s/kg);
-	//double* dvn;	  // SIMPLEC coefficients for vn (m2.s/kg);
-	//double* de;	  // SIMPLEC coefficients for Uce (m3.s/kg);
-	//double* dn;	  // SIMPLEC coefficients for Vcn (m3.s/kg);
+	//due: SIMPLEC coefficients for ue (m2.s/kg);
+	//dve: SIMPLEC coefficients for ve (m2.s/kg);
+	//dun: SIMPLEC coefficients for un (m2.s/kg);
+	//dvn: SIMPLEC coefficients for vn (m2.s/kg);
+	//de:  SIMPLEC coefficients for Uce (m3.s/kg);
+	//dn:  SIMPLEC coefficients for Vcn (m3.s/kg);
 
 	// Auxiliary variables;
 	int i, j, k, np, npe, npn;
@@ -663,14 +619,6 @@ simplec_coeffs get_internal_simplec_coefficients(int nx, int ny, double* re, dou
 	double sum_av_np;
 	double sum_av_npe;
 	double sum_av_npn;
-
-	// Initializating
-	//due = new double[nx*ny];
-	//dve = new double[nx*ny];
-	//dun = new double[nx*ny];
-	//dvn = new double[nx*ny];
-	//de  = new double[nx*ny];
-	//dn  = new double[nx*ny];
 	
 	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
 	{
@@ -696,10 +644,10 @@ simplec_coeffs get_internal_simplec_coefficients(int nx, int ny, double* re, dou
 			//std::for_each(av[npe], av[npe] + 9, [&](double val) { sum_av_npe += val; });
 			for (k = 0; k < 9; k++)
 			{
-				sum_au_np += au[np][k];
-				sum_au_npe += au[npe][k];
-				sum_av_np += av[np][k];
-				sum_av_npe += av[npe][k];
+				sum_au_np += au[np * 9 + k];
+				sum_au_npe += au[npe * 9 + k];
+				sum_av_np += av[np * 9 + k];
+				sum_av_npe += av[npe * 9 + k];
 			}
 
 			due[np] = 2.0 * re[np] * ye[np] / (sum_au_np + sum_au_npe);
@@ -731,10 +679,10 @@ simplec_coeffs get_internal_simplec_coefficients(int nx, int ny, double* re, dou
 			//std::for_each(av[npn], av[npn] + 9, [&](double val) { sum_av_npn += val; });
 			for (k = 0; k < 9; k++)
 			{
-				sum_au_np += au[np][k];
-				sum_au_npn += au[npn][k];
-				sum_av_np += av[np][k];
-				sum_av_npn += av[npn][k];
+				sum_au_np += au[np * 9 + k];
+				sum_au_npn += au[npn * 9 + k];
+				sum_av_np += av[np * 9 + k];
+				sum_av_npn += av[npn * 9 + k];
 			}
 
 			dun[np] = 2.0 * rn[np] * yk[np] / (sum_au_np + sum_au_npn);
@@ -774,7 +722,7 @@ pressure_specificmass get_pressure_density_correction_with_pl(int nx, int ny, do
 }
 
 velocity get_u_v_at_real_nodes_with_pl(int nx, int ny, double* xe, double* ye, double* xk,
-	double* yk, double* rp, double* pl, double** au, double** av,
+	double* yk, double* rp, double* pl, double* au, double* av,
 	double* u, double* v)
 {
 	// Corrects u and v at all real nodes with the pressure deviation pl.
@@ -818,8 +766,8 @@ velocity get_u_v_at_real_nodes_with_pl(int nx, int ny, double* xe, double* ye, d
 			//std::for_each(av[np], av[np] + 9, [&](double val) { sum_av_np += val; });
 			for (k = 0; k < 9; k++)
 			{
-				sum_au_np += au[np][k];
-				sum_av_np += av[np][k];
+				sum_au_np += au[np * 9 + k];
+				sum_av_np += av[np * 9 + k];
 			}
 
 			u[np] = u[np] + plup / sum_au_np;
