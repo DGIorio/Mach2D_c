@@ -22,6 +22,15 @@ int main()
 	pressure_specificmass p_ro;
 	specific_mass roe_ron;
 
+
+	// DELETAR REMOVER
+	int n_p, ii, jj, kk;
+	std::ofstream DGIoutputFile;
+	CreateFolder("./mach2d_output");
+	DGIoutputFile.open("./mach2d_output/dgi_output.txt", std::fstream::in | std::fstream::out | std::fstream::trunc);
+	std::streamsize ss = std::cout.precision();
+
+
 	// Generates the north and south boundaries of the grid based on a power-law model.					OK
 	xy = get_grid_boundary_power_law(nx, ny, akn, aks, la, lb, lr, rb, x, y);
 	x = xy.x;
@@ -128,39 +137,51 @@ int main()
 			// Calculations of the thermal properties
 			cp = set_cp(nx, ny, cp);
 
-			// Coefficients of the linear system for u (real volumes)
+			// Coefficients of the linear system for u (real volumes)							au OK
 			au = get_u_coefficients(nx, ny, dt, rp, re, rn, Jp
 									, roe, ron, roa, Uce, Vcn
 									, au);
 
-			// Source of the linear system for u (real volumes)									OK
+			//for (jj = 1; jj <= ny; jj++)
+			//{
+			//	for (ii = 0; ii < nx; ii++)
+			//	{
+			//		n_p = (jj - 1)*nx + ii;
+			//		for (kk = 0; kk < 9; kk++)
+			//		{
+			//			DGIoutputFile << std::setw(5) << n_p + 1 << " " << std::setw(18) << std::scientific << std::setprecision(10) << au[n_p * 9 + kk] << std::endl;
+			//		}
+			//	}
+			//}
+
+			// Source of the linear system for u (real volumes)									cup, bu OK
 			cup_bu = get_u_source(nx, ny, beta, dt, rp, re, rn, ye, yk
 								, Jp, roe, ron, roa, p, Uce, Vcn, ua, u, cup, bu);
 			cup = cup_bu.cuvp;
 			bu = cup_bu.b;
 
-			// Coefficients and source of the linear system of u for the fictitious volumes		OK
+			// Coefficients and source of the linear system of u for the fictitious volumes		au, bu OK
 			au_bu = set_bcu(nx, ny, UF, xk, yk, alphae, betae, u, v, Uce, Vcw, au, bu);
 			au = au_bu.a;
 			bu = au_bu.b;
 
-			// Coefficients of the linear system for v (real volumes)
+			// Coefficients of the linear system for v (real volumes)							av OK
 			av = get_v_coefficients(nx, ny, dt, rp, re, rn, Jp
 									, roe, ron, roa, Uce, Vcn
 									, av);
 
-			// Source of the linear system for v (real volumes)
+			// Source of the linear system for v (real volumes)									cvp OK								bv - five differences (because xe and xk)
 			cvp_bv = get_v_source(nx, ny, beta, dt, rp, re, rn, xe, xk
 								, Jp, roe, ron, roa, p, Uce, Vcn, va, v, cvp, bv);
 			cvp = cvp_bv.cuvp;
 			bv = cvp_bv.b;
 
-			// Coefficients and source of the linear system of v (fictitious volumes)
+			// Coefficients and source of the linear system of v (fictitious volumes)			av OK								bv - same differences
 			av_bv = set_bcv(nx, ny, xk, yk, u, v, Uce, Vcw, av, bv);
 			av = av_bv.a;
 			bv = av_bv.b;
 
-			// Calculates SIMPLEC coefficients at the internal real faces
+			// Calculates SIMPLEC coefficients at the internal real faces						due, dve, dun, dvn, de, dn OK
 			simplec_coefficients = get_internal_simplec_coefficients(nx, ny, re, rn, xe, ye, xk, yk, au, av,
 																		due, dve, dun, dvn, de, dn);
 			due = simplec_coefficients.due;
@@ -170,7 +191,7 @@ int main()
 			de = simplec_coefficients.de;
 			dn = simplec_coefficients.dn;
 
-			// Calculates the SIMPLEC coefficients at the boundary faces
+			// Calculates the SIMPLEC coefficients at the boundary faces						due, dve, dun, dvn, de, dn OK
 			simplec_coefficients = get_boundary_simplec_coefficients(nx, ny, xe, ye
 									, due, dve, dun, dvn, de, dn); // InOutput: last six
 			due = simplec_coefficients.due;
@@ -180,61 +201,59 @@ int main()
 			de = simplec_coefficients.de;
 			dn = simplec_coefficients.dn;
 
-			// Calculates g
+			// Calculates g																		g OK
 			for (i = 0; i < nx * ny; i++)
 			{
 				g[i] = 1.0 / (Rg*T[i]);
 			}
 
-			// Calculates the coefficients of the linear system for pressure correction
+			// Calculates the coefficients of the linear system for pressure correction			ap OK								ap - first two wrong (0 to e-311) OK
 			// g, ro, Uce and Vcn used in this subroutine are those calculated in the previous iteraction
 			// de and dn must be calculated with the coef. of the linear sytem for u and v from which
 			// u* and v* are obtained.
 			ap = get_p_coefficients(nx, ny, dt, rp, re, rn, Jp, Uce, Vcn, roe, ron, g, de, dn, ap);
 
-
 			// Solves the linear system for u
 
-			// LU decomposition
+			// LU decomposition																	dl9, du9 OK							du9 - one value rounded
 			d9 = lu2d9(au, nxy, nx, ny, dl9, du9);
 			dl9 = d9.lower;
 			du9 = d9.upper;
 
-			// Linear system solution
+			// Linear system solution															u OK
 			u = fb2d9(au, dl9, du9, ny, nx, nxy, u, tol_u, nitm_u, bu, r, w, z);
 
 			// Norm initialization
 			norm = 0.0;
 
-			// Calculates the norm of the residual of the linear system for u
+			// Calculates the norm of the residual of the linear system for u					norm OK								precision issue
 			norm = norm_l1_9d(nx, ny, u, bu, au, norm);
 
-			// Relative residual calculation
+			// Relative residual calculation													res_u OK							precision issue
 			//res_u = norm / sum(abs(bu));
 			res_u = norm / norm_l1_b(nx, ny, bu);
 
-
 			// Solves the linear system for v
 
-			// LU decomposition
+			// LU decomposition																	dl9, du9 OK							du9 - one value rounded
 			d9 = lu2d9(av, nxy, nx, ny, dl9, du9);
 			dl9 = d9.lower;
 			du9 = d9.upper;
 
-			// Linear system solution
+			// Linear system solution															v OK								rounding e-20
 			v = fb2d9(av, dl9, du9, ny, nx, nxy, v, tol_u, nitm_u, bv, r, w, z);
 
 			// Norm initialization
 			norm = 0.0;
 
-			// Calculates the norm of the residual of the linear system for v
+			// Calculates the norm of the residual of the linear system for v					norm OK								small precision issue (e-15)
 			norm = norm_l1_9d(nx, ny, v, bv, av, norm);
 
-			// Relative residual calculation
+			// Relative residual calculation													res_v OK							small precision issue (e-5)
 			//res_v = norm / sum(abs(bv));
 			res_v = norm / norm_l1_b(nx, ny, bv);
 
-			// Uses velocities at nodes to calculate velocities at internal real faces
+			// Uses velocities at nodes to calculate velocities at internal real faces			ue, ve, un, vn, Ucem, Vcn OK		ve,vn - precision e-16
 			velocities_face = get_velocities_at_internal_faces(nx, ny, dt, rp, re, rn, xe, ye, xk, yk
 								, xen, yen, xke, yke, Jp, cup, cvp, au, av, roa, p, u, v, uea, vea, una, vna
 								, ue, ve, un, vn, Uce, Vcn);	//InOut
@@ -245,7 +264,7 @@ int main()
 			Uce = velocities_face.Uce;
 			Vcn = velocities_face.Vcn;
 
-			// Calculates the velocities at boundary faces based on the boundary conditions
+			// Calculates the velocities at boundary faces based on the boundary conditions		ue, ve, un, vn, Ucem, Vcn OK		ve,vn - precision e-16
 			velocities_face = get_velocities_at_boundary_faces(nx, ny, UF, xe, ye, xk, yk, u, v
 																, ue, ve, un, vn, Uce, Vcn);	//InOut
 			ue = velocities_face.ue;
@@ -255,60 +274,61 @@ int main()
 			Uce = velocities_face.Uce;
 			Vcn = velocities_face.Vcn;
 
-			// ro, Uce and Vcn are the incorrect ones (obtained with p*)
+			// ro, Uce and Vcn are the incorrect ones (obtained with p*)						bp OK								bp - precision e-14
 			// rom, Ucem and Vcnm are those of the previous iteraction
 			bp = get_p_source(nx, ny, dt, rp, re, rn, Jp, roe, ron, roe, ron, ro, roa
 								, Ucea, Uce, Vcna, Vcn, bp);
-			
+
 			for (itm = 1; itm <= imax; itm++)
 			{
-				// Coefficients of the linear system of pl for the fictitious volumes
+				// Coefficients of the linear system of pl for the fictitious volumes			ap, bp OK							bp - precision e-14
 				ap_bp = set_bcp(nx, ny, alphae, betae, betan, gamman, Uce, Vcw, p, ap, bp);
 				ap = ap_bp.a;
 				bp = ap_bp.b;
 
 				// Solves the linear system for pl
 
-				// LU decomposition
+				// LU decomposition																dl5, du5 OK							du5 - precision e-14
 				d5 = lu2d5(ap, nxy, nx, ny, dl5, du5);
 				dl5 = d5.lower;
 				du5 = d5.upper;
 
-				// Solution of the linear system
+				// Solution of the linear system												pl OK								pl - precision e-10
 				pl = fb2d5(ap, dl5, du5, ny, nx, nxy, pl, tol_p, nitm_p, bp, r, w, z);
 			}
 
 			// Norm initialization
 			norm = 0.0;
 
-			// Calculates the norm of the residuals
+			// Calculates the norm of the residuals												norm OK
 			norm = norm_l1_5d(nx, ny, pl, bp, ap, norm);
 
 			// Residual calculation
 			res_p = norm;
 
-			// Pressure correction  (SIMPLEC method)
+			// Pressure correction  (SIMPLEC method)											ro, p OK
 			p_ro = get_pressure_density_correction_with_pl(nx, ny, pl, g, ro, p); // InOutput: last two
 			p = p_ro.p;
 			ro = p_ro.ro;
 
-			// Extrapolation of p to fictitious
+
+			// Extrapolation of p to fictitious													p OK
 			p = get_p_extrapolation_to_fictitious(nx, ny, PF, alphae, betae, betan, gamman, Uce, Vcw, p);
 
-			// Density at nodes with the state equation
+			// Density at nodes with the state equation											ro OK
 			ro = get_density_at_nodes(nx, ny, Rg, p, T, ro);
 
-			// Velocity correction (SIMPLEC method)
+			// Velocity correction (SIMPLEC method)												u, v OK								v - precision e-14
 			u_v = get_u_v_at_real_nodes_with_pl(nx, ny, xe, ye, xk, yk, rp, pl, au, av, u, v);
 			u = u_v.u;
 			v = u_v.v;
 
-			// Extrapolation is based on the boundary conditions
+			// Extrapolation is based on the boundary conditions								u, v OK								v - precision e-14
 			u_v = get_u_v_extrapolation_to_fictitious(nx, ny, UF, xk, yk, alphae, betae, Uce, Vcw, u, v);
 			u = u_v.u;
 			v = u_v.v;
 
-			// Velocity correction at faces (SIMPLEC method)
+			// Velocity correction at faces (SIMPLEC method)									ue,ve,un,vn,Uce,Vce OK				ue,ve,un,vn,Uce,Vce - precision e-4 (un,vn a bit weird but ok)
 			velocities_face = get_velocity_correction_at_faces_with_pl(nx, ny
 										, due, dve, dun, dvn, de, dn, pl
 										, ue, ve, un, vn, Uce, Vcn);      // InOutput
@@ -321,10 +341,10 @@ int main()
 
 			// Calculates density at faces using the corrected density and velocities at nodes		// VERIFY, maybe inout roe, ron
 			roe_ron = get_density_at_faces(nx, ny, beta, ro, Uce, Vcn, roe, ron);
-			roe = roe_ron.roe;
+			roe = roe_ron.roe;															//		roe, ron OK							roe, ron - precision e-4
 			ron = roe_ron.ron;
 
-			// Coefficients and source of the temperature linear system
+			// Coefficients and source of the temperature linear system							bt OK								bt - precision e+5
 			at_bt = get_T_coefficients_and_source(nx, ny, beta, dt, rp, re, rn
 										, xe, ye, xk, yk, Jp, roe, ron
 										, roa, p, pa, cp, Uce, Vcn, u, v, T, Ta
@@ -332,43 +352,53 @@ int main()
 			at = at_bt.a;
 			bt = at_bt.b;
 
-			// Calculating the contravariant velocity Vcw on the east boundary						// VERIFY, maybe inout Vcw
+			// Calculating the contravariant velocity Vcw on the east boundary					Vcw OK								Vcw - precision e-8
 			Vcw = get_Vcw(nx, ny, xe, xk, ue, ve, Vcw);
 
-			// Coefficients of the linear system of T for the fictitious volumes
+			// Coefficients of the linear system of T for the fictitious volumes				at, bt OK							at, bt- precision e+5
 			at_bt = set_bcT(nx, ny, TF, Uce, Vcw, T, alphae, betae, betan, gamman, at, bt);
 			at = at_bt.a;
 			bt = at_bt.b;
 
 			// Solves the linear system for T
 
-			// LU decomposition
+			// LU decomposition																	dl9, du9 OK							dl9, du9 - precision e+4, e-1
 			d9 = lu2d9(at, nxy, nx, ny, dl9, du9);
 			dl9 = d9.lower;
 			du9 = d9.upper;
 
-			// Linear system solution
+			// Linear system solution															T OK								T - precision e+1
 			T = fb2d9(at, dl9, du9, ny, nx, nxy, T, tol_u, nitm_u, bt, r, w, z);
 
 			// Norm initialization
 			norm = 0.0;
 
-			// Calculates the norm of the residual of the linear system for T
+			// Calculates the norm of the residual of the linear system for T					norm better							norm - seems better, lower
 			norm = norm_l1_9d(nx, ny, T, bt, at, norm);
 
-			// Relative residual calculation
+			// Relative residual calculation													res_T better						res_T - seems better, lower
 			//res_t = norm / sum(abs(bt));
 			res_T = norm / norm_l1_b(nx, ny, bt);
 
-			// Density at nodes with the state equation
+			// Density at nodes with the state equation											ro OK								ro - precision e-1
 			ro = get_density_at_nodes(nx, ny, Rg, p, T, ro);
 
-			// Calculates density at faces using the corrected density and velocities at nodes
+			// Calculates density at faces using the corrected density and velocities at nodes	roe, ron OK							roe, ron - precision e-1 and first real (ron) but OK
 			roe_ron = get_density_at_faces(nx, ny, beta, ro, Uce, Vcn, roe, ron);
 			roe = roe_ron.roe;
 			ron = roe_ron.ron;
 
-			res = res_u + res_v + res_T + res_p;
+			res = res_u + res_v + res_T + res_p;											  //res and other OK					all lower or good
+
+			//std::cout << std::setw(18) << std::scientific << std::setprecision(10) << res << " " << res_u << " " << res_v << " " << res_T << " " << res_p << std::endl;
+			//for (jj = 1; jj <= ny; jj++)
+			//{
+			//	for (ii = 0; ii < nx; ii++)
+			//	{
+			//		n_p = (jj - 1)*nx + ii;
+			//		DGIoutputFile << std::setw(5) << n_p + 1 << " " << std::setw(18) << std::scientific << std::setprecision(10) << ron[n_p] << std::endl;
+			//	}
+			//}
 
 			if (isnan(res))
 			{
@@ -383,22 +413,25 @@ int main()
 		// Periodic data print
 		if (it == 1)
 		{
-			//call get_cdfi(nx, ny, coord, Rg, PF, TF, UF, rb, yk, rn, p, Cdfi);
+			Cdfi = get_cdfi(nx, ny, coord, Rg, PF, TF, UF, rb, yk, rn, p, Cdfi);
 
-			std::cout << "it        Residuals              Cdfi                   it_stop" << std::endl;
+			std::cout << "it" << "\t" << "Residuals" << "\t" << "Cdfi" << "\t" << "it_stop" << std::endl;
 
-			outputFile << "it        Residuals              Cdfi                   it_stop" << std::endl;
+			outputFile << "it" << "\t" << "Residuals" << "\t" << "Cdfi" << "\t" << "it_stop" << std::endl;
 
-			//write(rid, "(I10, 2(1X,ES23.16), I10)") it, res, Cdfi, it_stop;
+			//outputFile << it << "\t" << res << "\t" << Cdfi << "\t" << it_stop << std::endl;
+			outputFile << std::setw(10) << it << " " << std::setw(24) << std::scientific << std::setprecision(16) << res << " "  << std::setw(24) << Cdfi << " " << std::setw(10) << it_stop << std::endl;
 		}
 
 		if (it % wlf == 0)
 		{
-			//call get_cdfi(nx, ny, coord, Rg, PF, TF, UF, rb, yk, rn, p, Cdfi);
+			Cdfi = get_cdfi(nx, ny, coord, Rg, PF, TF, UF, rb, yk, rn, p, Cdfi);
 
-			std::cout << it << " " << res << " " << 0.0 << " " << it_stop << std::endl;
+			//std::cout << it << "\t" << res << "\t" << Cdfi << "\t" << it_stop << std::endl;
+			std::cout << std::setw(10) << it << " " << std::setw(24) << std::scientific << std::setprecision(16) << res << " " << std::setw(24) << Cdfi << " " << std::setw(10) << it_stop << std::endl;
 
-			outputFile << it << " " << res << " " << 0.0 << " " << it_stop << std::endl;
+			//outputFile << it << "\t" << res << "\t" << Cdfi << "\t" << it_stop << std::endl;
+			outputFile << std::setw(10) << it << " " << std::setw(24) << std::scientific << std::setprecision(16) << res << " " << std::setw(24) << Cdfi << " " << std::setw(10) << it_stop << std::endl;
 		}
 
 		// Updating residual mean
@@ -439,7 +472,10 @@ int main()
 	gcp = set_gamma(nx, ny, Rg, cp, gcp);
 
 	// Post processing data
-	//post_processing(nx, ny, it, sem_a, sem_g, w_g, w_cam, lid
-	//	, sim_id, tcpu, RAM, res, lr, rb, x, y, xe, ye, xk, yk, Jp, Rg, cp
-	//	, gcp, Uce, Vcn, de, dn, pl, bp, xp, yp, u, v, p, T, ro, Cdfi);
+	post_processing(nx, ny, it, sem_a, sem_g, w_g, w_cam
+		, sim_id, tcpu, RAM, res, lr, rb, x, y, xe, ye, xk, yk, Jp, Rg, cp
+		, gcp, Uce, Vcn, de, dn, pl, bp, xp, yp, u, v, p, T, ro, Cdfi);
+
+	// DELETAR REMOVER
+	DGIoutputFile.close();
 }

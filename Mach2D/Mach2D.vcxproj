@@ -127,10 +127,12 @@
     <ClCompile Include="msi2d5-v03.cpp" />
     <ClCompile Include="msi2d9-v03.cpp" />
     <ClCompile Include="newton_interpolation.cpp" />
+    <ClCompile Include="postp.cpp" />
     <ClCompile Include="solvers.cpp" />
     <ClCompile Include="user.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="postp.h" />
     <ClInclude Include="coef.h" />
     <ClInclude Include="data.h" />
     <ClInclude Include="grid.h" />

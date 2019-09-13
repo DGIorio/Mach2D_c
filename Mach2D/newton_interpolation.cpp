@@ -301,7 +301,8 @@ int searcher(int n, double* x, double xc)
 	int kc;	// Index in the vector such that x(kc) <= xc <= x(kc+1)
 
 	// Auxiliary variables
-	int i, ki, km, kf;
+	int i;
+	int ki, km, kf;
 
 	ki = 1 - 1;
 	kf = n - 1;

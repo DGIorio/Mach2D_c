@@ -184,6 +184,7 @@ double* fb2d9(double* b, double* dl, double* du, int nj, int ni, int nij, double
 		ip = nij - ni - 1;					// already fixed loop - verify
 		z[ip] = w[ip] - du[ip * 4 + 0] * z[ip + 1] - du[ip * 4 + 1] * z[ip + ni - 1] - du[ip * 4 + 2] * z[ip + ni];
 		//-------------------------------------------------------------------------
+		//for (ip = nij - ni - 2 + 1; ip-- > 0;)				// already fixed loop - verify; For int;
 		for (ip = nij - ni - 2; ip >= 0; ip -= 1)				// already fixed loop - verify
 		{
 			z[ip] = w[ip] - du[ip * 4 + 0] * z[ip + 1] - du[ip * 4 + 1] * z[ip + ni - 1] - du[ip * 4 + 2] * z[ip + ni] - du[ip * 4 + 3] * z[ip + ni + 1];
@@ -316,6 +317,7 @@ diagonal_matrix lu2d9(double* b, int nij, int ni, int nj, double* dl, double* du
 	// Auxiliary variables
 	int isw, is, ise, iw, ip;
 	double alpha, phi1, phi2, phi3, phi4, alpha0;
+	//int mod_ip_ni;
 	int mod_ip_ni;
 
 	alpha0 = 0.5;

@@ -24,6 +24,7 @@
 #include "msi2d5-v03.h"
 #include "msi2d9-v03.h"
 #include "newton_interpolation.h"
+#include "postp.h"
 
 //Extern variables
 extern int nx;

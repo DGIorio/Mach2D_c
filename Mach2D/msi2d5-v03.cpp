@@ -167,6 +167,7 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 		ip = nij - ni;					// already fixed loop - verify
 		z[ip] = w[ip] - du[ip * 3 + 0] * z[ip + 1] - du[ip * 3 + 1] * z[ip + ni - 1];
 		//-----------------------------------------------------
+		//for (ip = nij - ni - 1 + 1; ip-- > 0;)				// already fixed loop - verify; For int;
 		for (ip = nij - ni - 1; ip >= 0; ip -= 1)				// already fixed loop - verify
 		{
 			z[ip] = w[ip] - du[ip * 3 + 0] * z[ip + 1] - du[ip * 3 + 1] * z[ip + ni - 1] - du[ip * 3 + 2] * z[ip + ni];
@@ -286,6 +287,7 @@ diagonal_matrix lu2d5(double* b, int nij, int ni, int nj, double* dl, double* du
 	// Auxiliary variables
 	int is, ise, iw, ip;
 	double alpha, phi1, phi4, alpha0;
+	//int mod_ip_ni;
 	int mod_ip_ni;
 
 	alpha0 = 0.5;

@@ -258,7 +258,7 @@ source_correction get_v_source(int nx, int ny, double beta, double dt, double* r
 			b[np] = mpa * va[np] / dt;
 
 			// Contribution to b due to advection (Deferred correction)
-			cvp[np] = -beta *
+			cvp[np] = -beta *												// not roe, ron, re, rn, v, cvp
 				(fme * ae * (v[npe] - v[np])
 					- fmw * aw * (v[np] - v[npw])
 					+ fmn * an * (v[npn] - v[np])
@@ -269,7 +269,7 @@ source_correction get_v_source(int nx, int ny, double beta, double dt, double* r
 
 			// Contribution to b due to pressure term
 			b[np] = b[np] + 0.5 * rp[np] * (
-				  xe[np] * (p[np] + p[npe])
+				+  xe[np] * (p[np] + p[npe])
 				- xe[npw] * (p[np] + p[npw])
 				- xk[np] * (p[np] + p[npn])
 				+ xk[nps] * (p[np] + p[nps])

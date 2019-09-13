@@ -307,6 +307,7 @@ void write_parameters(std::ofstream& outputFile)
 		outputFile << PF << std::endl;
 		outputFile << TF << std::endl;
 		outputFile << MF << std::endl;
+		outputFile << std::endl;
 	}
 	else std::cout << "Unable to open file" << std::endl;
 }
@@ -368,7 +369,7 @@ void allocate_initialize_variables()
 	roe = new double[nxy];
 	ron = new double[nxy];
 	u = new double[nxy];
-	v = new double[nxy]();
+	v = new double[nxy]();			// Verify if it is causing the precision issue e-14
 	ue = new double[nxy];
 	un = new double[nxy];
 	ve = new double[nxy]();
@@ -411,10 +412,10 @@ void allocate_initialize_variables()
 	av = new double[nxy * 9];
 	at = new double[nxy * 9];
 	ap = new double[nxy * 5];
-	dl9 = new double[nxy * 5];
-	du9 = new double[nxy * 4];
-	dl5 = new double[nxy * 4];
-	du5 = new double[nxy * 3];
+	dl9 = new double[nxy * 5]();
+	du9 = new double[nxy * 4]();
+	dl5 = new double[nxy * 4]();
+	du5 = new double[nxy * 3]();
 }
 
 void CreateFolder(std::string path)
