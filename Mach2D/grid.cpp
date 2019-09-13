@@ -48,7 +48,7 @@ coordinates get_uniform_grid(int nx, int ny, double* x, double* y)
 	int i, j, np, nps;
 	double xi, xf, yi, yf, dx, dy;
 
-	for (i = 0; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+	for (i = 0; i <= nx - 1 - 1; i += 1)
 	{
 		j = 1;
 		np = nx * (j - 1) + i;
@@ -63,7 +63,7 @@ coordinates get_uniform_grid(int nx, int ny, double* x, double* y)
 		dx = (xf - xi) / (ny - 2);
 		dy = (yf - yi) / (ny - 2);
 
-		for (j = 2; j <= ny - 2; j += 1)	// already fixed loop - verify
+		for (j = 2; j <= ny - 2; j += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -85,7 +85,7 @@ coordinates get_power_grid(double a1, int nx, int ny, double* x, double* y)
 	int i, j, np;
 	double a, r, xi, xf, yi, yf;
 
-	for (i = 0; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+	for (i = 0; i <= nx - 1 - 1; i += 1)
 	{
 		j = 1;
 		np = nx * (j - 1) + i;
@@ -108,7 +108,7 @@ coordinates get_power_grid(double a1, int nx, int ny, double* x, double* y)
 			a = 1.0;
 		}
 
-		for (j = 2; j <= ny - 2; j += 1)	// already fixed loop - verify
+		for (j = 2; j <= ny - 2; j += 1)
 		{
 			np = nx * (j - 1) + i;
 
@@ -131,7 +131,7 @@ coordinates get_pg_grid(double a1, int nx, int ny, double* x, double* y)
 	int i, j, np, npn;
 	double q, r, t, xi, xf, yi, yf;
 
-	for (i = 0; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+	for (i = 0; i <= nx - 1 - 1; i += 1)
 	{
 		j = 1;
 		np = nx * (j - 1) + i;
@@ -148,7 +148,7 @@ coordinates get_pg_grid(double a1, int nx, int ny, double* x, double* y)
 		q = get_gp_ratio(ny - 2, r);
 		t = 0.0;
 
-		for (j = 1; j <= ny - 3; j += 1)		// already fixed loop - verify
+		for (j = 1; j <= ny - 3; j += 1)
 		{
 			np = nx * (j - 1) + i;
 			npn = np + nx;
@@ -223,18 +223,17 @@ coordinates get_real_centroids_xy(int opt, int nx, int ny, double* x, double* y,
 	if (opt == 1) // Simple mean
 	{
 		// Centroids are given by the mean of the corners
-		for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+		for (j = 2; j <= ny - 1; j += 1)
 		{
-			for (i = 1; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+			for (i = 1; i <= nx - 1 - 1; i += 1)
 			{
 				np = nx * (j - 1) + i;
 				nps = np - nx;
 				npw = np - 1;
 				npsw = nps - 1;
 
-				xp[np] = (x[np] + x[npw] + x[npsw] + x[nps]) / 4.0;
-				yp[np] = (y[np] + y[npw] + y[npsw] + y[nps]) / 4.0;
-
+				xp[np] = (x[np] + x[npw] + x[npsw] + x[nps]) * 0.25;
+				yp[np] = (y[np] + y[npw] + y[npsw] + y[nps]) * 0.25;
 			}
 		}
 	}
@@ -243,9 +242,9 @@ coordinates get_real_centroids_xy(int opt, int nx, int ny, double* x, double* y,
 		// The rectangle is divided in two triangles of area A1 and A2.
 		// The centroids of each triangle is calculated by the mean of the corners.
 		// The centroid of the rectangle is given by the weighted mean of the centroids of each triangle.
-		for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+		for (j = 2; j <= ny - 1; j += 1)
 		{
-			for (i = 1; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+			for (i = 1; i <= nx - 1 - 1; i += 1)
 			{
 
 				np = nx * (j - 1) + i;
@@ -266,7 +265,6 @@ coordinates get_real_centroids_xy(int opt, int nx, int ny, double* x, double* y,
 
 				yp[np] = ((y[npsw] + y[nps] + y[np]) * A1 + (y[npsw] + y[np] + y[npw]) * A2)
 					/ (3.0 * (A1 + A2));
-
 			}
 		}
 	}
@@ -302,9 +300,9 @@ metrics get_metrics(int nx, int ny, double* x, double* y, double* xp, double* yp
 	double fw, fe, fs, fn, xkp, xep, ykp, yep;
 
 	// Derivatives relatively to eta at the center of the east face
-	for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 0; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+		for (i = 0; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -317,9 +315,9 @@ metrics get_metrics(int nx, int ny, double* x, double* y, double* xp, double* yp
 	}
 
 	// Derivatives relatively to csi at the center of the north face
-	for (j = 1; j <= ny - 1; j += 1)			// already fixed loop - verify
+	for (j = 1; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			npw = np - 1;
@@ -332,9 +330,9 @@ metrics get_metrics(int nx, int ny, double* x, double* y, double* xp, double* yp
 	}
 
 	// Derivatives relatively to csi at the center of the east face (only inner real faces)
-	for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 2 - 1; i += 1)	// already fixed loop - verify
+		for (i = 1; i <= nx - 2 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			npe = np + 1;
@@ -345,49 +343,49 @@ metrics get_metrics(int nx, int ny, double* x, double* y, double* xp, double* yp
 	}
 
 	// Derivatives relatively to csi at the center of the east face (only west boundary of the domain)
-	i = 1;										// already fixed - verify
-	for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+	i = 1;
+	for (j = 2; j <= ny - 1; j += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
 		npw = np - 1;
 		npsw = nps - 1;
 
-		fw = (x[npw] + x[npsw]) / 2.0;
-		fe = (x[np] + x[nps]) / 2.0;
+		fw = (x[npw] + x[npsw]) * 0.5;
+		fe = (x[np] + x[nps]) * 0.5;
 
 		xke[npw] = -3.0 * fw + 4.0 * xp[np] - fe;
 
-		fw = (y[npw] + y[npsw]) / 2.0;
-		fe = (y[np] + y[nps]) / 2.0;
+		fw = (y[npw] + y[npsw]) * 0.5;
+		fe = (y[np] + y[nps]) * 0.5;
 
 		yke[npw] = -3.0 * fw + 4.0 * yp[np] - fe;
 	}
 
 	// Derivatives relatively to csi at the center of the east face (only east boundary of the domain)
-	i = nx - 1 - 1;								// already fixed - verify
-	for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+	i = nx - 1 - 1;
+	for (j = 2; j <= ny - 1; j += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
 		npw = np - 1;
 		npsw = nps - 1;
 
-		fw = (x[npw] + x[npsw]) / 2.0;
-		fe = (x[np] + x[nps]) / 2.0;
+		fw = (x[npw] + x[npsw]) * 0.5;
+		fe = (x[np] + x[nps]) * 0.5;
 
 		xke[np] = fw - 4.0 * xp[np] + 3.0 * fe;
 
-		fw = (y[npw] + y[npsw]) / 2.0;
-		fe = (y[np] + y[nps]) / 2.0;
+		fw = (y[npw] + y[npsw]) * 0.5;
+		fe = (y[np] + y[nps]) * 0.5;
 
 		yke[np] = fw - 4.0 * yp[np] + 3.0 * fe;
 	}
 
 	// Derivatives relatively to eta at the center of the north face (only inner real faces)
-	for (j = 2; j <= ny - 2; j += 1)			// already fixed loop - verify
+	for (j = 2; j <= ny - 2; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			npn = np + nx;
@@ -399,48 +397,48 @@ metrics get_metrics(int nx, int ny, double* x, double* y, double* xp, double* yp
 
 	// Derivatives relatively to eta at the center of the north face (only south boundary of the domain)
 	j = 2;
-	for (i = 1; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
 		npw = np - 1;
 		npsw = nps - 1;
 
-		fs = (x[nps] + x[npsw]) / 2.0;
-		fn = (x[np] + x[npw]) / 2.0;
+		fs = (x[nps] + x[npsw]) * 0.5;
+		fn = (x[np] + x[npw]) * 0.5;
 
 		xen[nps] = -3.0 * fs + 4.0 * xp[np] - fn;
 
-		fs = (y[nps] + y[npsw]) / 2.0;
-		fn = (y[np] + y[npw]) / 2.0;
+		fs = (y[nps] + y[npsw]) * 0.5;
+		fn = (y[np] + y[npw]) * 0.5;
 
 		yen[nps] = -3.0 * fs + 4.0 * yp[np] - fn;
 	}
 
 	// Derivatives relatively to eta at the center of the north face (only north boundary of the domain)
 	j = ny - 1;
-	for (i = 1; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
 		npw = np - 1;
 		npsw = nps - 1;
 
-		fs = (x[nps] + x[npsw]) / 2.0;
-		fn = (x[np] + x[npw]) / 2.0;
+		fs = (x[nps] + x[npsw]) * 0.5;
+		fn = (x[np] + x[npw]) * 0.5;
 
 		xen[np] = fs - 4.0 * xp[np] + 3.0 * fn;
 
-		fs = (y[nps] + y[npsw]) / 2.0;
-		fn = (y[np] + y[npw]) / 2.0;
+		fs = (y[nps] + y[npsw]) * 0.5;
+		fn = (y[np] + y[npw]) * 0.5;
 
 		yen[np] = fs - 4.0 * yp[np] + 3.0 * fn;
 	}
 
 	// Beta and J at the center of the east face (all real faces)
-	for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 0; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+		for (i = 0; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 
@@ -451,9 +449,9 @@ metrics get_metrics(int nx, int ny, double* x, double* y, double* xp, double* yp
 	}
 
 	// Beta and J at center of the north face (all real faces)
-	for (j = 1; j <= ny - 1; j += 1)			// already fixed loop - verify
+	for (j = 1; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 
@@ -464,27 +462,27 @@ metrics get_metrics(int nx, int ny, double* x, double* y, double* xp, double* yp
 	}
 
 	// Jacobian J at the center of all real volumes
-	for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)	// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
 			npw = np - 1;
 			npsw = nps - 1;
 
-			fw = (x[npw] + x[npsw]) / 2.0;
-			fe = (x[np] + x[nps]) / 2.0;
-			fs = (x[nps] + x[npsw]) / 2.0;
-			fn = (x[np] + x[npw]) / 2.0;
+			fw = (x[npw] + x[npsw]) * 0.5;
+			fe = (x[np] + x[nps]) * 0.5;
+			fs = (x[nps] + x[npsw]) * 0.5;
+			fn = (x[np] + x[npw]) * 0.5;
 
 			xkp = fe - fw; // (x_csi)_P
 			xep = fn - fs; // (x_eta)_P
 
-			fw = (y[npw] + y[npsw]) / 2.0;
-			fe = (y[np] + y[nps]) / 2.0;
-			fs = (y[nps] + y[npsw]) / 2.0;
-			fn = (y[np] + y[npw]) / 2.0;
+			fw = (y[npw] + y[npsw]) * 0.5;
+			fe = (y[np] + y[nps]) * 0.5;
+			fs = (y[nps] + y[npsw]) * 0.5;
+			fn = (y[np] + y[npw]) * 0.5;
 
 			ykp = fe - fw; // (y_csi)_P
 			yep = fn - fs; // (y_eta)_P
@@ -543,26 +541,26 @@ radius get_radius(int coord, int nx, int ny, double* y, double* yp, double* re, 
 	if (coord == 1)
 	{
 		// Radius at the center of the east face
-		for (i = 0; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 0; i <= nx - 1 - 1; i += 1)
 		{
-			for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+			for (j = 2; j <= ny - 1; j += 1)
 			{
 				np = nx * (j - 1) + i;
 				nps = np - nx;
 
-				re[np] = (y[np] + y[nps]) / 2.0;
+				re[np] = (y[np] + y[nps]) * 0.5;
 			}
 		}
 
 		// Radius at the center of the north face
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
-			for (j = 1; j <= ny - 1; j += 1)			// already fixed loop - verify
+			for (j = 1; j <= ny - 1; j += 1)
 			{
 				np = nx * (j - 1) + i;
 				npw = np - 1;
 
-				rn[np] = (y[np] + y[npw]) / 2.0;
+				rn[np] = (y[np] + y[npw]) * 0.5;
 			}
 		}
 
@@ -571,7 +569,7 @@ radius get_radius(int coord, int nx, int ny, double* y, double* yp, double* re, 
 
 		// Radius  of the center of the volume (south fictitious)
 		j = 1;
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			npn = np + nx;
@@ -582,7 +580,7 @@ radius get_radius(int coord, int nx, int ny, double* y, double* yp, double* re, 
 
 		// Radius  of the center of the volume (north fictitious)
 		j = ny;
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -592,8 +590,8 @@ radius get_radius(int coord, int nx, int ny, double* y, double* yp, double* re, 
 		}
 
 		// Radius  of the center of the volume (west fictitious)
-		i = 1 - 1;									// already fixed - verify
-		for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+		i = 1 - 1;
+		for (j = 2; j <= ny - 1; j += 1)
 		{
 			np = nx * (j - 1) + i;
 			npe = np + 1;
@@ -603,8 +601,8 @@ radius get_radius(int coord, int nx, int ny, double* y, double* yp, double* re, 
 		}
 
 		// Radius  of the center of the volume (east fictitious)
-		i = nx - 1;									// already fixed - verify
-		for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+		i = nx - 1;
+		for (j = 2; j <= ny - 1; j += 1)
 		{
 			np = nx * (j - 1) + i;
 			npw = np - 1;
@@ -614,7 +612,7 @@ radius get_radius(int coord, int nx, int ny, double* y, double* yp, double* re, 
 		}
 
 		// Radius  of the center of the volume (corner fictitious: SW)
-		i = 1 - 1;									// already fixed - verify
+		i = 1 - 1;
 		j = 1;
 
 		np = nx * (j - 1) + i;
@@ -626,7 +624,7 @@ radius get_radius(int coord, int nx, int ny, double* y, double* yp, double* re, 
 		rp[np] = 4.0 * y[np] - rp[npe] - rp[npn] - rp[npne];
 
 		// Radius  of the center of the volume (corner fictitious: SE)
-		i = nx - 1;									// already fixed - verify
+		i = nx - 1;
 		j = 1;
 
 		np = nx * (j - 1) + i;
@@ -638,7 +636,7 @@ radius get_radius(int coord, int nx, int ny, double* y, double* yp, double* re, 
 		rp[np] = 4.0 * y[npw] - rp[npw] - rp[npn] - rp[npnw];
 
 		// Radius  of the center of the volume (corner fictitious: NW)
-		i = 1 - 1;									// already fixed - verify
+		i = 1 - 1;
 		j = ny;
 
 		np = nx * (j - 1) + i;
@@ -650,7 +648,7 @@ radius get_radius(int coord, int nx, int ny, double* y, double* yp, double* re, 
 		rp[np] = 4.0 * y[nps] - rp[npe] - rp[nps] - rp[npse];
 
 		// Radius  of the center of the volume (corner fictitious: NE)
-		i = nx - 1;									// already fixed - verify
+		i = nx - 1;
 		j = ny;
 
 		np = nx * (j - 1) + i;

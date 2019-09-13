@@ -9,9 +9,9 @@ double norm_l1_5d(int nx, int ny, double* var, double* b, double* a, double norm
 	int i, j, np, nps, npn, npw, npe;
 
 	// Norm is calculated taking into account only real volumes
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -37,9 +37,9 @@ double norm_l1_9d(int nx, int ny, double* var, double* b, double* a, double norm
 	int i, j, np, nps, npn, npw, npe, npsw, npse, npnw, npne;
 
 	// Norm is calculated taking into account only real volumes
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -77,9 +77,9 @@ double norm_l1_b(int nx, int ny, double* b)
 	// Norm is calculated taking into account only real volumes
 	norm = 0.0;
 
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 	

@@ -178,15 +178,14 @@ void get_parameters()
 	std::string line;
 	std::vector<std::string> lines;
 	inputFile.open("./mach2d_input/mach2d_input.txt");
-	// Reading file name from which parameters will be read
 
+	// Reading file name from which parameters will be read
 	if (inputFile.is_open())
 	{
 		getline(inputFile, line);
 		strpos = line.find(" ");
 		line = line.substr(0, strpos);
 		line.erase(std::remove(line.begin(), line.end(), '"'), line.end());
-		//std::cout << line << '\n';
 	}
 	else std::cout << "Unable to open file" << std::endl;
 	inputFile.close();
@@ -201,7 +200,6 @@ void get_parameters()
 			strpos = line.find(" ");
 			line = line.substr(0, strpos);
 			line.erase(std::remove(line.begin(), line.end(), '"'), line.end());
-			//std::cout << line << '\n';
 			lines.push_back(line);
 		}
 	}
@@ -257,8 +255,8 @@ void get_parameters()
 
 void write_parameters(std::ofstream& outputFile)
 {
-	//> Writes the parameters, read from the input data file, to the file.
-	//// Input and output variables are not explicited.
+	// Writes the parameters, read from the input data file, to the file.
+	// Input and output variables are not explicited.
 	if (outputFile.is_open())
 	{
 		outputFile << "" << std::endl;
@@ -314,8 +312,8 @@ void write_parameters(std::ofstream& outputFile)
 
 void allocate_initialize_variables()
 {
-	//> Reads the parameters from an input file, allocates the vectors and initialise them.
-	//// Input and output variables are not explicited.
+	// Reads the parameters from an input file, allocates the vectors and initialise them.
+	// Input and output variables are not explicited.
 
 	// Reading data from input data file
 	get_parameters();
@@ -369,7 +367,7 @@ void allocate_initialize_variables()
 	roe = new double[nxy];
 	ron = new double[nxy];
 	u = new double[nxy];
-	v = new double[nxy]();			// Verify if it is causing the precision issue e-14
+	v = new double[nxy]();
 	ue = new double[nxy];
 	un = new double[nxy];
 	ve = new double[nxy]();

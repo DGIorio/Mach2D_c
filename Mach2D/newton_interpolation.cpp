@@ -25,15 +25,15 @@ double* get_newton_interpolation_coefficients(int n, double* xn, double* fn, dou
 		M[i][0] = fn[i];;
 	}
 
-	for (j = 1; j <= n; j += 1)					// already fixed loop - verify
+	for (j = 1; j <= n; j += 1)
 	{
-		for (i = j; i <= n; i += 1)				// already fixed loop - verify
+		for (i = j; i <= n; i += 1)
 		{
 			M[i][j] = (M[i][j - 1] - M[i - 1][j - 1]) / (xn[i] - xn[i - j]);
 		}
 	}
 	
-	for (j = 0; j <= n; j += 1)					// already fixed loop - verify
+	for (j = 0; j <= n; j += 1)
 	{
 		c[j] = M[j][j];
 	}
@@ -64,10 +64,10 @@ double get_newton_interpolation_f0(int n, double x, double* xn, double* c)
 
 	aux1 = 0.0;
 
-	for (i = 0; i <= n; i += 1)					// already fixed loop - verify
+	for (i = 0; i <= n; i += 1)
 	{
 		aux2 = 1.0;
-		for (j = 0; j <= i - 1; j += 1)			// already fixed loop - verify
+		for (j = 0; j <= i - 1; j += 1)
 		{
 			aux2 = aux2 * (x - xn[j]);
 		}
@@ -93,13 +93,13 @@ double get_newton_interpolation_f1(int n, double x, double* xn, double* c)
 
 	aux1 = 0.0;
 
-	for (i = 0; i <= n; i += 1)					// already fixed loop - verify
+	for (i = 0; i <= n; i += 1)
 	{
 		aux2 = 0.0;
-		for (j = 0; j <= i - 1; j += 1)			// already fixed loop - verify
+		for (j = 0; j <= i - 1; j += 1)
 		{
 			aux3 = 1.0;
-			for (k = 0; k <= i - 1; k += 1)		// already fixed loop - verify
+			for (k = 0; k <= i - 1; k += 1)
 			{
 				if (k != j)
 				{
@@ -315,7 +315,7 @@ int searcher(int n, double* x, double xc)
 	}
 	else
 	{
-		for (i = 1 - 1; i <= n - 1; i += 1)		// already fixed loop - verify
+		for (i = 1 - 1; i <= n - 1; i += 1)
 		{
 			km = (ki + kf) / 2;
 			if ((x[ki] - xc) * (x[km] - xc) > 0.0)

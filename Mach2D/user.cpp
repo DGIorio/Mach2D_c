@@ -7,31 +7,30 @@ coordinates get_grid_boundary_power_law(int nx, int ny, double akn, double aks, 
 {
 	int i, j, np;
 	double aux;
-	double const pi = 3.141592653589793238463;	//requires less calculation time
+	//double const pi = 3.141592653589793238463;
 	coordinates result;
 
 	// North boundary
 	j = ny - 1;
-	for (i = 0; i <= nx - 1 - 1; i += 1) 		// already fixed loop - verify
+	for (i = 0; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
-		x[np] = la * std::pow((double)(i) / (double)(nx - 2), akn) - (la - lr);		// already fixed i
+		x[np] = la * std::pow((double)(i) / (double)(nx - 2), akn) - (la - lr);
 		aux = (x[np] - lr) / la;
 		y[np] = lb * sqrt(1.0 - aux*aux);
 	}
 
 	// South boundary
 	j = 1;
-	for (i = 0; i <= nx - 1 - 1; i += 1)		// already fixed loop - verify
+	for (i = 0; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
-		x[np] = lr * std::pow((double)(i) / (double)(nx - 2), aks);					// already fixed i
+		x[np] = lr * std::pow((double)(i) / (double)(nx - 2), aks);
 		y[np] = f_body_shape(x[np], lr, rb);
 	}
 
 	result.x = x;
 	result.y = y;
-	
 	return result;
 }
 
@@ -65,31 +64,15 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 	// Calculates the coefficients and source of the linear system of u for the fictitious volumes based on the boundary conditions.
 
 	// Auxiliary variables
-	int i;
-	int j;
-	int k;
-	int np;
-	int npw;
-	int npe;
-	int nps;
-	int npn;
-	int npse;
-	int npsw;
-	int npne;
-	int npnw;
+	int i, j, k;
+	int np, npw, npe, nps, npn, npse, npsw, npne, npnw;
 
-	int npnnw;
-	int npssw;
-	int npnne;
-	int npsse;
-	int npss;
-	int npnn;
+	int npnnw, npssw, npnne, npsse, npss, npnn;
 
-	double aux;
-	double u_eta;
+	double aux, u_eta;
 
 	// West boundary
-	i = 0;			// already fixed loop - verify
+	i = 0;
 	j = 2;
 
 	np = nx * (j - 1) + i;
@@ -110,7 +93,7 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 	b[np] = -betae[np] / alphae[np] * u_eta;
 
-	for (j = 3; j <= ny-2; j += 1)		// already fixed loop - verify
+	for (j = 3; j <= ny-2; j += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
@@ -151,8 +134,7 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 
 	// East boundary
-	i = nx - 1;			// already fixed loop - verify
-
+	i = nx - 1;
 	j = 2;
 
 	np = nx * (j - 1) + i;
@@ -173,9 +155,8 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 	b[np] = -Vcw[j] / Uce[npw] * u_eta;
 
 
-	for (j = 3; j <= ny - 2; j += 1)		// already fixed loop - verify
+	for (j = 3; j <= ny - 2; j += 1)
 	{
-
 		np = nx * (j - 1) + i;
 		nps = np - nx;
 		npn = np + nx;
@@ -217,7 +198,7 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 	// South boundary
 	j = 1;
-	for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		npn = np + nx;
@@ -238,7 +219,7 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 	// North boundary
 	j = ny;
-	for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		for (k = 0; k <= 9 - 1; k += 1)
@@ -254,7 +235,7 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 	
 	// Corners (extrapolation)
 	// SW
-	i = 0;			// already fixed loop - verify
+	i = 0;
 	j = 1;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -272,7 +253,7 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 
 
 	// SE
-	i = nx-1;		// already fixed loop - verify
+	i = nx-1;
 	j = 1;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -289,7 +270,7 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 	b[np] = (u[npn] + u[npw] + u[npnw]) / 3.0;
 
 	// NW
-	i = 0;			// already fixed loop - verify
+	i = 0;
 	j = ny;
 	np = nx * (j - 1) + i;
 	nps = np - nx;
@@ -306,7 +287,7 @@ coeffs_source set_bcu(int nx, int ny, double UF, double* xk, double* yk, double*
 	b[np] = (u[nps] + u[npe] + u[npse]) / 3.0;
 
 	// NE
-	i = nx - 1;			// already fixed loop - verify
+	i = nx - 1;
 	j = ny;
 	np = nx * (j - 1) + i;
 	nps = np - nx;
@@ -333,29 +314,17 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 	// Calculates the coefficients and source of the linear system of v for the fictitious volumes based on the boundary conditions.
 
 	// Auxiliary variables
-	int i;
-	int j;
-	int k;
-	int np;
-	int npw;
-	int npe;
-	int nps;
-	int npn;
-	int npse;
-	int npsw;
-	int npne;
-	int npnw;
+	int i, j, k;
+	int np, npw, npe, nps, npn, npse, npsw, npne, npnw;
 
-	int npnnw;
-	int npssw;
+	int npnnw, npssw;
 
-	double aux;
-	double v_eta;
+	double aux, v_eta;
 
 	// West boundary
-	i = 0;			// already fixed loop - verify
+	i = 0;
 
-	for (j = 2; j <= ny - 1; j += 1)			// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
 		np = nx * (j - 1) + i;
 		for (k = 0; k <= 9 - 1; k += 1)
@@ -368,7 +337,7 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 	}
 
 	// East boundary
-	i = nx-1;			// already fixed loop - verify
+	i = nx - 1;
 
 	j = 2;
 
@@ -389,7 +358,7 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 	b[np] = -Vcw[j] / Uce[npw] * v_eta;
 
-	for (j = 3; j <= ny - 2; j += 1)			// already fixed loop - verify
+	for (j = 3; j <= ny - 2; j += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
@@ -408,7 +377,6 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 		v_eta = 0.5 * (v[npnw] - v[npsw]);
 
 		b[np] = -Vcw[j] / Uce[npw] * v_eta;
-
 	}
 
 	j = ny - 1;
@@ -432,7 +400,7 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 	// South boundary
 	j = 1;
-	for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		npn = np + nx;
@@ -452,7 +420,7 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 	// North boundary
 	j = ny;
-	for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 
@@ -468,7 +436,7 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 	
 	// Corners (extrapolation)
 	// SW
-	i = 0;				// already fixed loop - verify
+	i = 0;
 	j = 1;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -486,7 +454,7 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 
 
 	// SE
-	i = nx - 1;				// already fixed loop - verify
+	i = nx - 1;
 	j = 1;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -503,7 +471,7 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 	b[np] = (v[npn] + v[npw] + v[npnw]) / 3.0;
 
 	// NW
-	i = 0;				// already fixed loop - verify
+	i = 0;
 	j = ny;
 	np = nx * (j - 1) + i;
 	nps = np - nx;
@@ -520,7 +488,7 @@ coeffs_source set_bcv(int nx, int ny, double* xk, double* yk, double* u, double*
 	b[np] = (v[nps] + v[npe] + v[npse]) / 3.0;
 
 	// NE
-	i = nx - 1;			// already fixed loop - verify
+	i = nx - 1;
 	j = ny;
 	np = nx * (j - 1) + i;
 	nps = np - nx;
@@ -547,29 +515,13 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 	// Calculates the coefficients  and source of the linear system of T for the fictitious volumes based on the boundary conditions.
 
 	// Auxiliary variables
-	int i;
-	int j;
-	int k;
-	int np;
-	int npe;
-	int npw;
-	int nps;
-	int npn;
-	int npse;
-	int npsw;
-	int npne;
-	int npnw;
-	int npnn;
-	int npnne;
-	int npss;
-	int npsse;
-	int npnnw;
-	int npssw;
-	double Te;
-	double Tk;
+	int i, j, k;
+	int np, npe, npw, nps, npn, npse, npsw, npne, npnw, npnn, npss;
+	int npnne, npsse, npnnw, npssw;
+	double Te, Tk;
 
 	// West boundary
-	i = 0;				// already fixed loop - verify
+	i = 0;
 	j = 2;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -589,7 +541,7 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 	b[np] = -betae[np] / alphae[np] * Te;
 
-	for (j = 3; j <= ny - 2; j += 1)			// already fixed loop - verify
+	for (j = 3; j <= ny - 2; j += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
@@ -629,7 +581,7 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 	b[np] = -betae[np] / alphae[np] * Te;
 
 	// East boundary
-	i = nx - 1;				// already fixed loop - verify
+	i = nx - 1;
 	j = 2;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -648,7 +600,7 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 	b[np] = -Vcw[j] / Uce[npw] * Te;
 
-	for (j = 3; j <= ny - 2; j += 1)				// already fixed loop - verify
+	for (j = 3; j <= ny - 2; j += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
@@ -691,7 +643,7 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 	// South boundary
 	j = 1;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		npn = np + nx;
@@ -715,7 +667,7 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 	// North boundary
 	j = ny;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		for (k = 0; k <= 9 - 1; k += 1)
@@ -729,7 +681,7 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 	// Corners (extrapolation)
 	// SW
-	i = 0;				// already fixed loop - verify
+	i = 0;
 	j = 1;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -747,7 +699,7 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 
 
 	// SE
-	i = nx - 1;				// already fixed loop - verify
+	i = nx - 1;
 	j = 1;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -764,7 +716,7 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 	b[np] = (T[npn] + T[npw] + T[npnw]) / 3.0;
 
 	// NW
-	i = 0;			// already fixed loop - verify
+	i = 0;
 	j = ny;
 	np = nx * (j - 1) + i;
 	nps = np - nx;
@@ -781,7 +733,7 @@ coeffs_source set_bcT(int nx, int ny, double TF, double* Uce, double* Vcw, doubl
 	b[np] = (T[nps] + T[npe] + T[npse]) / 3.0;
 
 	// NE
-	i = nx - 1;			// already fixed loop - verify
+	i = nx - 1;
 	j = ny;
 	np = nx * (j - 1) + i;
 	nps = np - nx;
@@ -808,29 +760,13 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 	// Calculates the coefficients and source of the linear system of the pressure deviation for the fictitious volumes based on the boundary conditions.
 
 	// Auxiliary variables
-	int i;
-	int j;
-	int k;
-	int np;
-	int npe;
-	int npw;
-	int nps;
-	int npn;
-	int npse;
-	int npsw;
-	int npne;
-	int npnw;
-	int npnee;
-	int npnww;
-	int npnne;
-	int npsse;
-	int npnnw;
-	int npssw;
-	double pk;
-	double pe;
+	int i, j, k;
+	int np, npe, npw, nps, npn, npse, npsw, npne, npnw;
+	int npnee, npnww, npnne, npsse, npnnw, npssw;
+	double pk, pe;
 
 	// West boundary
-	i = 0;				// already fixed loop - verify
+	i = 0;
 	j = 2;
 
 	np = nx * (j - 1) + i;
@@ -848,11 +784,11 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	a[np * 5 + 3] = -1.0;
 
-	pe = (-p[npnne] + 4.0 * p[npne] - 3.0 * p[npe]) / 2.0;
+	pe = (-p[npnne] + 4.0 * p[npne] - 3.0 * p[npe]) * 0.5;
 
 	b[np] = p[npe] - p[np] - betae[np] / alphae[np] * pe;
 
-	for (j = 3; j <= ny - 2; j += 1)			// already fixed loop - verify
+	for (j = 3; j <= ny - 2; j += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
@@ -870,7 +806,7 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 		a[np * 5 + 3] = -1.0;
 
-		pe = (p[npne] - p[npse]) / 2.0;
+		pe = (p[npne] - p[npse]) * 0.5;
 
 		b[np] = p[npe] - p[np] - betae[np] / alphae[np] * pe;
 	}
@@ -892,13 +828,13 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	a[np * 5 + 3] = -1.0;
 
-	pe = (3.0 * p[npe] - 4.0 * p[npse] + p[npsse]) / 2.0;
+	pe = (3.0 * p[npe] - 4.0 * p[npse] + p[npsse]) * 0.5;
 
 	b[np] = p[npe] - p[np] - betae[np] / alphae[np] * pe;
 
 
 	// East boundary
-	i = nx - 1;			// already fixed loop - verify
+	i = nx - 1;
 	j = 2;
 
 	np = nx * (j - 1) + i;
@@ -914,13 +850,12 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 	a[np * 5 + 1] = -1.0;
 	a[np * 5 + 2] = 1.0;
 
-	pe = (-p[npnnw] + 4.0 * p[npnw] - 3.0 * p[npw]) / 2.0;
+	pe = (-p[npnnw] + 4.0 * p[npnw] - 3.0 * p[npw]) * 0.5;
 
 	b[np] = p[npw] - p[np] - Vcw[j] / Uce[npw] * pe;
 
 	for (j = 3; j <= ny - 2; j += 1)
 	{
-
 		np = nx * (j - 1) + i;
 		nps = np - nx;
 		npn = np + nx;
@@ -935,7 +870,7 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 		a[np * 5 + 1] = -1.0;
 		a[np * 5 + 2] = 1.0;
 
-		pe = (p[npnw] - p[npsw]) / 2.0;
+		pe = (p[npnw] - p[npsw]) * 0.5;
 
 		b[np] = p[npw] - p[np] - Vcw[j] / Uce[npw] * pe;
 	}
@@ -955,14 +890,14 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 	a[np * 5 + 1] = -1.0;
 	a[np * 5 + 2] = 1.0;
 
-	pe = (3.0 * p[npw] - 4.0 * p[npsw] + p[npssw]) / 2.0;
+	pe = (3.0 * p[npw] - 4.0 * p[npsw] + p[npssw]) * 0.5;
 
 	b[np] = p[npw] - p[np] - Vcw[j] / Uce[npw] * pe;
 
 
 	// South boundary
 	j = 1;
-	i = 1;				// already fixed loop - verify
+	i = 1;
 
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -978,11 +913,11 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	a[np * 5 + 4] = -1.0;
 
-	pk = (-p[npnee] + 4.0 * p[npne] - 3.0 * p[npn]) / 2.0;
+	pk = (-p[npnee] + 4.0 * p[npne] - 3.0 * p[npn]) * 0.5;
 
 	b[np] = p[npn] - p[np] - betan[np] / gamman[np] * pk;
 
-	for (i = 2; i <= nx - 2 - 1; i += 1)			// already fixed loop - verify
+	for (i = 2; i <= nx - 2 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		npn = np + nx;
@@ -998,12 +933,12 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 		a[np * 5 + 4] = -1.0;
 
-		pk = (p[npne] - p[npnw]) / 2.0;
+		pk = (p[npne] - p[npnw]) * 0.5;
 
 		b[np] = p[npn] - p[np] - betan[np] / gamman[np] * pk;
 	}
 
-	i = nx - 1 - 1;				// already fixed loop - verify
+	i = nx - 1 - 1;
 
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -1019,7 +954,7 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 	a[np * 5 + 4] = -1.0;
 
-	pk = (3.0 * p[npn] - 4.0 * p[npnw] + p[npnww]) / 2.0;
+	pk = (3.0 * p[npn] - 4.0 * p[npnw] + p[npnww]) * 0.5;
 
 	b[np] = p[npn] - p[np] - betan[np] / gamman[np] * pk;
 
@@ -1027,7 +962,7 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 	// North boundary
 	j = ny;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 
 		np = nx * (j - 1) + i;
@@ -1046,9 +981,8 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 
 	// Corners
-
 	// SW
-	i = 0;				// already fixed loop - verify
+	i = 0;
 	j = 1;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -1066,7 +1000,7 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 
 	// SE
-	i = nx - 1;				// already fixed loop - verify
+	i = nx - 1;
 	j = 1;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -1084,7 +1018,7 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 
 	// NW
-	i = 0;				// already fixed loop - verify
+	i = 0;
 	j = ny;
 	np = nx * (j - 1) + i;
 	nps = np - nx;
@@ -1102,7 +1036,7 @@ coeffs_source set_bcp(int nx, int ny, double* alphae, double* betae, double* bet
 
 
 	// NE
-	i = nx - 1;			// already fixed loop - verify
+	i = nx - 1;
 	j = ny;
 	np = nx * (j - 1) + i;
 	nps = np - nx;
@@ -1129,11 +1063,9 @@ double* get_Vcw(int nx, int ny, double* xe, double* xk, double* ue, double* ve, 
 	// Calculates the contravariant velocity V on the west face of the fictitious volumes of the east boundary.
 
 	//Inner variables
-	int i;
-	int j;
-	int np;
+	int i, j, np;
 
-	i = nx - 1 - 1;				// already fixed loop - verify
+	i = nx - 1 - 1;
 	for (j = 2; j <= ny - 1; j += 1)
 	{
 		np = nx * (j - 1) + i;
@@ -1153,7 +1085,7 @@ velocity get_u_v_extrapolation_to_fictitious(int nx, int ny, double UF, double* 
 	double aux, u_eta, v_eta;
 
 	// West boundary ( only for u )
-	i = 0;				// already fixed loop - verify
+	i = 0;
 	j = 2;
 
 	np = nx * (j - 1) + i;
@@ -1196,7 +1128,7 @@ velocity get_u_v_extrapolation_to_fictitious(int nx, int ny, double UF, double* 
 
 
 	// West boundary ( only for v )
-	i = 0;				// already fixed loop - verify
+	i = 0;
 
 	for (j = 2; j <= ny - 1; j += 1)
 	{
@@ -1208,7 +1140,7 @@ velocity get_u_v_extrapolation_to_fictitious(int nx, int ny, double UF, double* 
 
 
 	// East boundary
-	i = nx - 1;				// already fixed loop - verify
+	i = nx - 1;
 	j = 2;
 
 	np = nx * (j - 1) + i;
@@ -1257,7 +1189,7 @@ velocity get_u_v_extrapolation_to_fictitious(int nx, int ny, double UF, double* 
 	// South boundary
 	j = 1;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)				// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		npn = np + nx;
@@ -1273,7 +1205,7 @@ velocity get_u_v_extrapolation_to_fictitious(int nx, int ny, double UF, double* 
 	// North boundary (far field)
 	j = ny;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
@@ -1303,7 +1235,7 @@ double* get_T_extrapolation_to_fictitious(int nx, int ny, double TF, double* alp
 	double Te, Tk;
 
 	// West boundary (frontal symmetry line)
-	i = 0;					// already fixed loop - verify
+	i = 0;
 	j = 2;
 
 	np = nx * (j - 1) + i;
@@ -1346,7 +1278,7 @@ double* get_T_extrapolation_to_fictitious(int nx, int ny, double TF, double* alp
 
 
 	// East face
-	i = nx - 1;				// already fixed loop - verify
+	i = nx - 1;
 	j = 2;
 
 	np = nx * (j - 1) + i;
@@ -1390,7 +1322,7 @@ double* get_T_extrapolation_to_fictitious(int nx, int ny, double TF, double* alp
 	// South boundary
 	j = 1;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)				// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		npn = np + nx;
@@ -1407,7 +1339,7 @@ double* get_T_extrapolation_to_fictitious(int nx, int ny, double TF, double* alp
 	// North boundary (far field);
 	j = ny;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)				// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
@@ -1430,7 +1362,7 @@ double* get_p_extrapolation_to_fictitious(int nx, int ny, double PF, double* alp
 	double pk, pe;
 
 	// West boundary
-	i = 0;				// already fixed loop - verify
+	i = 0;
 	j = 2;
 
 	np = nx * (j - 1) + i;
@@ -1439,7 +1371,7 @@ double* get_p_extrapolation_to_fictitious(int nx, int ny, double PF, double* alp
 	npne = npn + 1;
 	npnne = npne + nx;
 
-	pe = (-p[npnne] + 4.0 * p[npne] - 3.0 * p[npe]) / 2.0;
+	pe = (-p[npnne] + 4.0 * p[npne] - 3.0 * p[npe]) * 0.5;
 
 	p[np] = p[npe] - betae[np] / alphae[np] * pe;
 
@@ -1452,7 +1384,7 @@ double* get_p_extrapolation_to_fictitious(int nx, int ny, double PF, double* alp
 		npse = nps + 1;
 		npne = npn + 1;
 
-		pe = (p[npne] - p[npse]) / 2.0;
+		pe = (p[npne] - p[npse]) * 0.5;
 
 		p[np] = p[npe] - betae[np] / alphae[np] * pe;
 	}
@@ -1465,13 +1397,13 @@ double* get_p_extrapolation_to_fictitious(int nx, int ny, double PF, double* alp
 	npse = nps + 1;
 	npsse = npse - nx;
 
-	pe = (3.0 * p[npe] - 4.0 * p[npse] + p[npsse]) / 2.0;
+	pe = (3.0 * p[npe] - 4.0 * p[npse] + p[npsse]) * 0.5;
 
 	p[np] = p[npe] - betae[np] / alphae[np] * pe;
 
 
 	// East boundary
-	i = nx - 1;				// already fixed loop - verify
+	i = nx - 1;
 	j = 2;
 
 	np = nx * (j - 1) + i;
@@ -1480,7 +1412,7 @@ double* get_p_extrapolation_to_fictitious(int nx, int ny, double PF, double* alp
 	npnw = npn - 1;
 	npnnw = npnw + nx;
 
-	pe = (-p[npnnw] + 4.0 * p[npnw] - 3.0 * p[npw]) / 2.0;
+	pe = (-p[npnnw] + 4.0 * p[npnw] - 3.0 * p[npw]) * 0.5;
 
 	p[np] = p[npw] - Vcw[j] / Uce[npw] * pe;
 
@@ -1493,7 +1425,7 @@ double* get_p_extrapolation_to_fictitious(int nx, int ny, double PF, double* alp
 		npsw = nps - 1;
 		npnw = npn - 1;
 
-		pe = (p[npnw] - p[npsw]) / 2.0;
+		pe = (p[npnw] - p[npsw]) * 0.5;
 
 		p[np] = p[npw] - Vcw[j] / Uce[npw] * pe;
 	}
@@ -1506,45 +1438,44 @@ double* get_p_extrapolation_to_fictitious(int nx, int ny, double PF, double* alp
 	npsw = nps - 1;
 	npssw = npsw - nx;
 
-	pe = (3.0 * p[npw] - 4.0 * p[npsw] + p[npssw]) / 2.0;
+	pe = (3.0 * p[npw] - 4.0 * p[npsw] + p[npssw]) * 0.5;
 
 	p[np] = p[npw] - Vcw[j] / Uce[npw] * pe;
 
 
 	// South boundary
 	j = 1;
-	i = 1;				// already fixed loop - verify
+	i = 1;
 
 	np = nx * (j - 1) + i;
 	npn = np + nx;
 	npne = npn + 1;
 	npnee = npne + 1;
 
-	pk = (-p[npnee] + 4.0 * p[npne] - 3.0 * p[npn]) / 2.0;
+	pk = (-p[npnee] + 4.0 * p[npne] - 3.0 * p[npn]) * 0.5;
 
 	p[np] = p[npn] - betan[np] / gamman[np] * pk;
 
-	for (i = 2; i <= nx - 2 - 1; i += 1)				// already fixed loop - verify
+	for (i = 2; i <= nx - 2 - 1; i += 1)
 	{
-
 		np = nx * (j - 1) + i;
 		npn = np + nx;
 		npnw = npn - 1;
 		npne = npn + 1;
 
-		pk = (p[npne] - p[npnw]) / 2.0;
+		pk = (p[npne] - p[npnw]) * 0.5;
 
 		p[np] = p[npn] - betan[np] / gamman[np] * pk;
 	}
 
-	i = nx - 1 - 1;					// already fixed loop - verify
+	i = nx - 1 - 1;
 
 	np = nx * (j - 1) + i;
 	npn = np + nx;
 	npnw = npn - 1;
 	npnww = npnw - 1;
 
-	pk = (3.0 * p[npn] - 4.0 * p[npnw] + p[npnww]) / 2.0;
+	pk = (3.0 * p[npn] - 4.0 * p[npnw] + p[npnww]) * 0.5;
 
 	p[np] = p[npn] - betan[np] / gamman[np] * pk;
 
@@ -1552,7 +1483,7 @@ double* get_p_extrapolation_to_fictitious(int nx, int ny, double PF, double* alp
 	// North boundary (far field)
 	j = ny;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)				// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		nps = np - nx;
@@ -1574,7 +1505,7 @@ double* get_extrapolation_to_corners(int nx, int ny, double* f)
 
 	// Corners (extrapolation)
 	// SW
-	i = 0;					// already fixed loop - verify
+	i = 0;
 	j = 1;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -1584,7 +1515,7 @@ double* get_extrapolation_to_corners(int nx, int ny, double* f)
 	f[np] = (f[npn] + f[npe] + f[npne]) / 3.0;
 
 	// SE
-	i = nx - 1;					// already fixed loop - verify		
+	i = nx - 1;	
 	j = 1;
 	np = nx * (j - 1) + i;
 	npn = np + nx;
@@ -1594,7 +1525,7 @@ double* get_extrapolation_to_corners(int nx, int ny, double* f)
 	f[np] = (f[npn] + f[npw] + f[npnw]) / 3.0;
 
 	// NW
-	i = 0;							// already fixed loop - verify
+	i = 0;
 	j = ny;
 	np = nx * (j - 1) + i;
 	nps = np - nx;
@@ -1604,7 +1535,7 @@ double* get_extrapolation_to_corners(int nx, int ny, double* f)
 	f[np] = (f[nps] + f[npe] + f[npse]) / 3.0;
 
 	// NE
-	i = nx - 1;						// already fixed loop - verify
+	i = nx - 1;
 	j = ny;
 	np = nx * (j - 1) + i;
 	nps = np - nx;
@@ -1624,7 +1555,7 @@ simplec_coeffs get_boundary_simplec_coefficients(int nx, int ny, double* xe, dou
 	int i, j, np, npe, npw, npn;
 
 	// West boundary
-	i = 0;						// already fixed loop - verify
+	i = 0;
 
 	for (j = 2; j <= ny - 1; j += 1)
 	{
@@ -1639,7 +1570,7 @@ simplec_coeffs get_boundary_simplec_coefficients(int nx, int ny, double* xe, dou
 	}
 
 	// East boundary
-	i = nx - 1 - 1;						// already fixed loop - verify
+	i = nx - 1 - 1;
 
 	for (j = 2; j <= ny - 1; j += 1)
 	{
@@ -1656,7 +1587,7 @@ simplec_coeffs get_boundary_simplec_coefficients(int nx, int ny, double* xe, dou
 	// South boundary
 	j = 1;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)					// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		npn = np + nx;
@@ -1671,7 +1602,7 @@ simplec_coeffs get_boundary_simplec_coefficients(int nx, int ny, double* xe, dou
 	// North boundary
 	j = ny - 1;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)						// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 
@@ -1702,14 +1633,14 @@ velocity_face get_velocities_at_boundary_faces(int nx, int ny, double UF, double
 	double aux;
 
 	// West boundary ( frontal symmetry line )
-	i = 0;							// already fixed loop - verify
+	i = 0;
 
 	for (j = 2; j <= ny - 1; j += 1)
 	{
 		np = nx * (j - 1) + i;
 		npe = np + 1;
 
-		ue[np] = (u[np] + u[npe]) / 2.0;
+		ue[np] = (u[np] + u[npe]) * 0.5;
 
 		ve[np] = 0.0;
 
@@ -1717,16 +1648,16 @@ velocity_face get_velocities_at_boundary_faces(int nx, int ny, double UF, double
 	}
 
 	// East boundary
-	i = nx - 1 - 1;						// already fixed loop - verify
+	i = nx - 1 - 1;
 
 	for (j = 2; j <= ny - 1; j += 1)
 	{
 		np = nx * (j - 1) + i;
 		npe = np + 1;
 
-		ue[np] = (u[np] + u[npe]) / 2.0;
+		ue[np] = (u[np] + u[npe]) * 0.5;
 
-		ve[np] = (v[np] + v[npe]) / 2.0;
+		ve[np] = (v[np] + v[npe]) * 0.5;
 
 		Uce[np] = ue[np] * ye[np] - ve[np] * xe[np];
 	}
@@ -1734,7 +1665,7 @@ velocity_face get_velocities_at_boundary_faces(int nx, int ny, double UF, double
 	// South boundary (body surface)
 	j = 1;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)						// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 		npn = np + nx;
@@ -1752,7 +1683,7 @@ velocity_face get_velocities_at_boundary_faces(int nx, int ny, double UF, double
 	// North boundary (far field surface)
 	j = ny - 1;
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)						// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		np = nx * (j - 1) + i;
 
@@ -1802,7 +1733,7 @@ initial_conditions get_initial_conditions(int nx, int ny, double PF, double TF, 
 	v = velocities.v;
 
 	// U and V on the interface between real volumes
-	for (i = 1; i <= nx - 2 - 1; i += 1)					// already fixed loop - verify
+	for (i = 1; i <= nx - 2 - 1; i += 1)
 	{
 		for (j = 2; j <= ny - 1; j += 1)
 		{
@@ -1812,7 +1743,7 @@ initial_conditions get_initial_conditions(int nx, int ny, double PF, double TF, 
 		}
 	}
 
-	for (i = 1; i <= nx - 1 - 1; i += 1)					// already fixed loop - verify
+	for (i = 1; i <= nx - 1 - 1; i += 1)
 	{
 		for (j = 2; j <= ny - 2; j += 1)
 		{

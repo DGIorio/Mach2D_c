@@ -53,13 +53,13 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 	
 	// Calculation of the residual vector r = A.var-rhs
 	//--------------------------------------------------------------------------------
-	ip = 0;								// already fixed loop - verify
+	ip = 0;
 	ie = ip + 1;
 	in = ip + ni;
 	r[ip] = -rhs[ip] + b[ip * 5 + 2] * var[ip] + b[ip * 5 + 3] * var[ie]
 		+ b[ip * 5 + 4] * var[in];
 	//--------------------------------------------------------------------------------
-	for (ip = 1; ip <= ni - 1 - 1; ip += 1)				// already fixed loop - verify
+	for (ip = 1; ip <= ni - 1 - 1; ip += 1)
 	{
 		iw = ip - 1;
 		ie = ip + 1;
@@ -68,13 +68,13 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 			+ b[ip * 5 + 4] * var[in];
 	}
 	//--------------------------------------------------------------------------------
-	ip = ni - 1;						// already fixed loop - verify
+	ip = ni - 1;
 	iw = ip - 1;
 	in = ip + ni;
 	r[ip] = -rhs[ip] + b[ip * 5 + 1] * var[iw] + b[ip * 5 + 2] * var[ip]
 		+ b[ip * 5 + 4] * var[in];
 	//--------------------------------------------------------------------------------
-	for (ip = ni; ip <= nij - ni - 1; ip += 1)				// already fixed loop - verify
+	for (ip = ni; ip <= nij - ni - 1; ip += 1)
 	{
 		iw = ip - 1;
 		ie = ip + 1;
@@ -100,13 +100,13 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 		}
 	}
 	//--------------------------------------------------------------------------------
-	ip = nij - ni;						// already fixed loop - verify
+	ip = nij - ni;
 	ie = ip + 1;
 	is = ip - ni;
 	r[ip] = -rhs[ip] + b[ip * 5 + 0] * var[is]
 		+ b[ip * 5 + 2] * var[ip] + b[ip * 5 + 3] * var[ie];
 	//--------------------------------------------------------------------------------
-	for (ip = nij - ni + 1; ip <= nij - 1 - 1; ip += 1)				// already fixed loop - verify
+	for (ip = nij - ni + 1; ip <= nij - 1 - 1; ip += 1)
 	{
 		iw = ip - 1;
 		ie = ip + 1;
@@ -115,7 +115,7 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 			+ b[ip * 5 + 1] * var[iw] + b[ip * 5 + 2] * var[ip] + b[ip * 5 + 3] * var[ie];
 	}
 	//--------------------------------------------------------------------------------
-	ip = nij - 1;						// already fixed loop - verify
+	ip = nij - 1;
 	iw = ip - 1;
 	is = ip - ni;
 	r[ip] = -rhs[ip] + b[ip * 5 + 0] * var[is]
@@ -137,18 +137,18 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 
 		// Solving linear system Lw = -r
 		//------------------------------
-		ip = 0;							// already fixed loop - verify
+		ip = 0;
 		w[ip] = -r[ip] / dl[ip * 4 + 0];
 		//------------------------------
-		for (ip = 1; ip <= ni - 1 - 1; ip += 1)				// already fixed loop - verify
+		for (ip = 1; ip <= ni - 1 - 1; ip += 1)
 		{
 			w[ip] = -(r[ip] + dl[ip * 4 + 1] * w[ip - 1]) / dl[ip * 4 + 0];
 		}
 		//--------------------------------------------------
-		ip = ni - 1;					// already fixed loop - verify
+		ip = ni - 1;
 		w[ip] = -(r[ip] + dl[ip * 4 + 1] * w[ip - 1] + dl[ip * 4 + 2] * w[ip - ni + 1]) / dl[ip * 4 + 0];
 		//---------------------------------------------------------------------
-		for (ip = ni; ip <= nij - 1; ip += 1)				// already fixed loop - verify
+		for (ip = ni; ip <= nij - 1; ip += 1)
 		{
 			w[ip] = -(r[ip] + dl[ip * 4 + 1] * w[ip - 1] + dl[ip * 4 + 2] * w[ip - ni + 1] + dl[ip * 4 + 3] * w[ip - ni]) / dl[ip * 4 + 0];
 		}
@@ -156,19 +156,19 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 
 		// Solving linear system Uz = w
 		//-----------------------------
-		ip = nij - 1;					// already fixed loop - verify
+		ip = nij - 1;
 		z[ip] = w[ip];
 		//------------
-		for (ip = nij - 2; ip >= nij - ni + 2 - 1; ip -= 1)				// already fixed loop - verify
+		for (ip = nij - 2; ip >= nij - ni + 2 - 1; ip -= 1)
 		{
 			z[ip] = w[ip] - du[ip * 3 + 0] * z[ip + 1];
 		}
 		//----------------------------------
-		ip = nij - ni;					// already fixed loop - verify
+		ip = nij - ni;
 		z[ip] = w[ip] - du[ip * 3 + 0] * z[ip + 1] - du[ip * 3 + 1] * z[ip + ni - 1];
 		//-----------------------------------------------------
-		//for (ip = nij - ni - 1 + 1; ip-- > 0;)				// already fixed loop - verify; For int;
-		for (ip = nij - ni - 1; ip >= 0; ip -= 1)				// already fixed loop - verify
+		//for (ip = nij - ni - 1 + 1; ip-- > 0;)
+		for (ip = nij - ni - 1; ip >= 0; ip -= 1)
 		{
 			z[ip] = w[ip] - du[ip * 3 + 0] * z[ip + 1] - du[ip * 3 + 1] * z[ip + ni - 1] - du[ip * 3 + 2] * z[ip + ni];
 		}
@@ -183,13 +183,13 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 
 		// Calculation of the residual vector r = A.var-rhs
 		//--------------------------------------------------------------------------------
-		ip = 0;							// already fixed loop - verify
+		ip = 0;
 		ie = ip + 1;
 		in = ip + ni;
 		r[ip] = -rhs[ip] + b[ip * 5 + 2] * var[ip] + b[ip * 5 + 3] * var[ie]
 			+ b[ip * 5 + 4] * var[in];
 		//--------------------------------------------------------------------------------
-		for (ip = 1; ip <= ni - 1 - 1; ip += 1)				// already fixed loop - verify
+		for (ip = 1; ip <= ni - 1 - 1; ip += 1)
 		{
 			iw = ip - 1;
 			ie = ip + 1;
@@ -198,13 +198,13 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 				+ b[ip * 5 + 4] * var[in];
 		}
 		//--------------------------------------------------------------------------------
-		ip = ni - 1;					// already fixed loop - verify
+		ip = ni - 1;
 		iw = ip - 1;
 		in = ip + ni;
 		r[ip] = -rhs[ip] + b[ip * 5 + 1] * var[iw] + b[ip * 5 + 2] * var[ip]
 			+ b[ip * 5 + 4] * var[in];
 		//--------------------------------------------------------------------------------
-		for (ip = ni; ip <= nij - ni - 1; ip += 1)				// already fixed loop - verify
+		for (ip = ni; ip <= nij - ni - 1; ip += 1)
 		{
 			iw = ip - 1;
 			ie = ip + 1;
@@ -230,13 +230,13 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 			}
 		}
 		//--------------------------------------------------------------------------------
-		ip = nij - ni;						// already fixed loop - verify
+		ip = nij - ni;
 		ie = ip + 1;
 		is = ip - ni;
 		r[ip] = -rhs[ip] + b[ip * 5 + 0] * var[is]
 			+ b[ip * 5 + 2] * var[ip] + b[ip * 5 + 3] * var[ie];
 		//--------------------------------------------------------------------------------
-		for (ip = nij - ni + 1; ip <= nij - 1 - 1; ip += 1)				// already fixed loop - verify
+		for (ip = nij - ni + 1; ip <= nij - 1 - 1; ip += 1)
 		{
 			iw = ip - 1;
 			ie = ip + 1;
@@ -245,7 +245,7 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 				+ b[ip * 5 + 1] * var[iw] + b[ip * 5 + 2] * var[ip] + b[ip * 5 + 3] * var[ie];
 		}
 		//--------------------------------------------------------------------------------
-		ip = nij - 1;						// already fixed loop - verify
+		ip = nij - 1;
 		iw = ip - 1;
 		is = ip - ni;
 		r[ip] = -rhs[ip] + b[ip * 5 + 0] * var[is]
@@ -287,19 +287,18 @@ diagonal_matrix lu2d5(double* b, int nij, int ni, int nj, double* dl, double* du
 	// Auxiliary variables
 	int is, ise, iw, ip;
 	double alpha, phi1, phi4, alpha0;
-	//int mod_ip_ni;
 	int mod_ip_ni;
 
 	alpha0 = 0.5;
 	alpha = alpha0;
 
 	//------------------------------------------------------------------------------------------------------
-	ip = 0;									// already fixed loop - verify
+	ip = 0;
 	dl[ip * 4 + 0] = b[ip * 5 + 2];
 	du[ip * 3 + 0] = b[ip * 5 + 3] / dl[ip * 4 + 0];
 	du[ip * 3 + 2] = b[ip * 5 + 4] / dl[ip * 4 + 0];
 	//------------------------------------------------------------------------------------------------------
-	for (ip = 1; ip <= ni - 1; ip += 1)				// already fixed loop - verify
+	for (ip = 1; ip <= ni - 1; ip += 1)
 	{
 		iw = ip - 1;
 		dl[ip * 4 + 1] = b[ip * 5 + 1];
@@ -309,7 +308,7 @@ diagonal_matrix lu2d5(double* b, int nij, int ni, int nj, double* dl, double* du
 		du[ip * 3 + 2] = b[ip * 5 + 4] / dl[ip * 4 + 0];
 	}
 	//------------------------------------------------------------------------------------------------------
-	for (ip = ni; ip <= nij - ni - 1; ip += 1)				// already fixed loop - verify
+	for (ip = ni; ip <= nij - ni - 1; ip += 1)
 	{
 		iw = ip - 1;
 		is = ip - ni;
@@ -334,7 +333,7 @@ diagonal_matrix lu2d5(double* b, int nij, int ni, int nj, double* dl, double* du
 		du[ip * 3 + 2] = (b[ip * 5 + 4] - alpha * phi4) / dl[ip * 4 + 0];
 	}
 	//------------------------------------------------------------------------------------------------------
-	ip = nij - ni;								// already fixed loop - verify
+	ip = nij - ni;
 	iw = ip - 1;
 	is = ip - ni;
 	ise = is + 1;
@@ -345,7 +344,7 @@ diagonal_matrix lu2d5(double* b, int nij, int ni, int nj, double* dl, double* du
 	du[ip * 3 + 0] = (b[ip * 5 + 3] - dl[ip * 4 + 2] * du[ise * 3 + 2]) / dl[ip * 4 + 0];
 	du[ip * 3 + 1] = -dl[ip * 4 + 1] * du[iw * 3 + 2] / dl[ip * 4 + 0];
 	//------------------------------------------------------------------------------------------------------
-	for (ip = nij - ni + 1; ip <= nij - 1 - 1; ip += 1)				// already fixed loop - verify
+	for (ip = nij - ni + 1; ip <= nij - 1 - 1; ip += 1)
 	{
 		iw = ip - 1;
 		is = ip - ni;
@@ -357,7 +356,7 @@ diagonal_matrix lu2d5(double* b, int nij, int ni, int nj, double* dl, double* du
 		du[ip * 3 + 0] = (b[ip * 5 + 3] - dl[ip * 4 + 2] * du[ise * 3 + 2]) / dl[ip * 4 + 0];
 	}
 	//------------------------------------------------------------------------------------------------------
-	ip = nij - 1;								// already fixed loop - verify
+	ip = nij - 1;
 	iw = ip - 1;
 	is = ip - ni;
 	ise = is + 1;

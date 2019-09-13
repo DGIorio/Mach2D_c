@@ -54,15 +54,13 @@ void write_main_fields(int nx, int ny, std::string sim_id, double* xp, double* y
 
 	if (outputFile.is_open())
 	{
-		outputFile << "# x y p ro T u v M" << std::endl;
+		outputFile << "#" << std::setw(11) << "x" << " " << std::setw(11) << "y" << " " << std::setw(11) << "p" << " " << std::setw(11) << "ro" << " " << std::setw(11) << "T" << " " << std::setw(11) << "u" << " " << std::setw(11) << "v" << " " << std::setw(11) << "M" << std::endl;
 
 		for (j = 1; j <= ny; j++)
 			{
 			for (i = 0; i < nx; i++)
 				{
 				np = (j - 1)*nx + i;
-				//outputFile << xp[np] << " " << yp[np] << " " << p[np] << " " << ro[np] << " "
-				//		   << T[np] << " " << u[np] << " " << v[np] << " " << M[np] << std::endl;
 
 				outputFile << " " << std::setw(11) << std::scientific << std::setprecision(4)
 					       << xp[np] << " " << std::setw(11) << yp[np] << " " << std::setw(11) << p[np] << " " << std::setw(11) << ro[np] << " "
@@ -79,7 +77,6 @@ void write_main_fields(int nx, int ny, std::string sim_id, double* xp, double* y
 void post_processing_boundaries(int nx, int ny, double* x, double* y, double* xp, double* yp, double* u, double* v, double* p, double* T) // InOutput: last six entries
 {
 	// Calculates the fields u, v, p and T over the boundaries and store them in the fictitious volumes.
-
 
 	// Auxiliary variables
 	int i, j, np, npn, npw, nps, npe, npsw, npse, npnw, npne;
@@ -221,7 +218,7 @@ double get_cdfi(int nx, int ny, int coord, double Rg, double PF, double TF, doub
 
 	j = 1;
 	
-	for (i = 1; i < nx - 1; i++)		// fixed
+	for (i = 1; i < nx - 1; i++)
 	{
 		np = nx * (j - 1) + i;
 

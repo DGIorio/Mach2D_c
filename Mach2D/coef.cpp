@@ -32,9 +32,9 @@ specific_mass get_density_at_faces(int nx, int ny, double beta, double* ro, doub
 	double ae, an;				// Coefficients of UDS scheme
 
 	// Density at east face
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 0; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 0; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			npe = np + 1;
@@ -45,9 +45,9 @@ specific_mass get_density_at_faces(int nx, int ny, double beta, double* ro, doub
 	}
 
 	// Density at north face
-	for (j = 1; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 1; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			npn = np + nx;
@@ -74,9 +74,9 @@ double* get_u_coefficients(int nx, int ny, double dt, double* rp, double* re, do
 	double ae, aw, an, as;
 
 	// Contribution to the coefficients due to the advection term
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -122,9 +122,9 @@ source_correction get_u_source(int nx, int ny, double beta, double dt, double* r
 	double fmw, fme, fmn, fms, mpa;
 	double as, an, aw, ae;
 
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -184,9 +184,9 @@ double* get_v_coefficients(int nx, int ny, double dt, double* rp, double* re, do
 	double ae, aw, an, as;
 
 	// Contribution to the coefficients due to the advection term
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -232,9 +232,9 @@ source_correction get_v_source(int nx, int ny, double beta, double dt, double* r
 	double fmw, fme, fmn, fms, mpa;
 	double as, an, aw, ae;
 
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -258,7 +258,7 @@ source_correction get_v_source(int nx, int ny, double beta, double dt, double* r
 			b[np] = mpa * va[np] / dt;
 
 			// Contribution to b due to advection (Deferred correction)
-			cvp[np] = -beta *												// not roe, ron, re, rn, v, cvp
+			cvp[np] = -beta *
 				(fme * ae * (v[npe] - v[np])
 					- fmw * aw * (v[np] - v[npw])
 					+ fmn * an * (v[npn] - v[np])
@@ -295,9 +295,9 @@ coeffs_source get_T_coefficients_and_source(int nx, int ny, double beta, double 
 	double fmw, fme, fms, fmn, mpa, pup, pvp;
 	double as, an, aw, ae;
 
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -380,9 +380,9 @@ double* get_p_coefficients(int nx, int ny, double dt, double* rp, double* re, do
 	double as, an, aw, ae;
 	double roem, rowm, ronm, rosm;
 
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -439,9 +439,9 @@ double* get_p_source(int nx, int ny, double dt, double* rp, double* re, double* 
 	int i, j, np, nps, npn, npw, npe;
 	double as, an, aw, ae; // UDS coefficients
 
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -491,9 +491,9 @@ velocity_face get_velocities_at_internal_faces(int nx, int ny, double dt, double
 	double pue, pve, pun, pvn;
 
 	// Calculation of Uce at the inner faces of the real domain
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 2 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 2 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -524,7 +524,7 @@ velocity_face get_velocities_at_internal_faces(int nx, int ny, double dt, double
 			sumve = av[npe * 9 + 0] * v[nps] + av[npe * 9 + 1] * v[npse] + av[npe * 9 + 2] * v[npsee] + av[npe * 9 + 3] * v[np]
 				+ av[npe * 9 + 5] * v[npee] + av[npe * 9 + 6] * v[npn] + av[npe * 9 + 7] * v[npne] + av[npe * 9 + 8] * v[npnee];
 
-			aux = (p[npn] + p[npne] - p[nps] - p[npse]) / 4.0;
+			aux = (p[npn] + p[npne] - p[nps] - p[npse]) * 0.25;
 
 			pue = re[np] * (yke[np] * aux + ye[np] * (p[np] - p[npe]));
 
@@ -541,9 +541,9 @@ velocity_face get_velocities_at_internal_faces(int nx, int ny, double dt, double
 	}
 
 	// Calculation of Vcn at the inner faces of the real domain
-	for (j = 2; j <= ny - 2; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 2; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			nps = np - nx;
@@ -574,7 +574,7 @@ velocity_face get_velocities_at_internal_faces(int nx, int ny, double dt, double
 			sumvn = av[npn * 9 + 0] * v[npw] + av[npn * 9 + 1] * v[np] + av[npn * 9 + 2] * v[npe] + av[npn * 9 + 3] * v[npnw]
 				+ av[npn * 9 + 5] * v[npne] + av[npn * 9 + 6] * v[npnnw] + av[npn * 9 + 7] * v[npnn] + av[npn * 9 + 8] * v[npnne];
 
-			aux = (p[npne] + p[npe] - p[npnw] - p[npw]) / 4.0;
+			aux = (p[npne] + p[npe] - p[npnw] - p[npw]) * 0.25;
 
 			pun = rn[np] * (yk[np] * (p[npn] - p[np]) - yen[np] * aux);
 
@@ -620,9 +620,9 @@ simplec_coeffs get_internal_simplec_coefficients(int nx, int ny, double* re, dou
 	double sum_av_npe;
 	double sum_av_npn;
 	
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 2 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 2 - 1; i += 1)
 		{
 			sum_au_np = 0.0;
 			sum_au_npe = 0.0;
@@ -632,16 +632,6 @@ simplec_coeffs get_internal_simplec_coefficients(int nx, int ny, double* re, dou
 			np = nx * (j - 1) + i;
 			npe = np + 1;
 
-			//best
-			//sum_au_np = std::accumulate(au[np], au[np] + 9, 0.0, std::plus<double>());
-			//sum_au_npe = std::accumulate(au[npe], au[npe] + 9, 0.0, std::plus<double>());
-			//sum_av_np = std::accumulate(av[np], av[np] + 9, 0.0, std::plus<double>());
-			//sum_av_npe = std::accumulate(av[npe], av[npe] + 9, 0.0, std::plus<double>());
-			//worst
-			//std::for_each(au[np], au[np] + 9, [&](double val) { sum_au_np += val; });
-			//std::for_each(au[npe], au[npe] + 9, [&](double val) { sum_au_npe += val; });
-			//std::for_each(av[np], av[np] + 9, [&](double val) { sum_av_np += val; });
-			//std::for_each(av[npe], av[npe] + 9, [&](double val) { sum_av_npe += val; });
 			for (k = 0; k < 9; k++)
 			{
 				sum_au_np += au[np * 9 + k];
@@ -657,9 +647,9 @@ simplec_coeffs get_internal_simplec_coefficients(int nx, int ny, double* re, dou
 		}
 	}
 
-	for (j = 2; j <= ny - 2; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 2; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			sum_au_np = 0.0;
 			sum_au_npn = 0.0;
@@ -669,14 +659,6 @@ simplec_coeffs get_internal_simplec_coefficients(int nx, int ny, double* re, dou
 			np = nx * (j - 1) + i;
 			npn = np + nx;
 
-			//sum_au_np = std::accumulate(au[np], au[np] + 9, 0.0, std::plus<double>());
-			//sum_au_npn = std::accumulate(au[npn], au[npn] + 9, 0.0, std::plus<double>());
-			//sum_av_np = std::accumulate(av[np], av[np] + 9, 0.0, std::plus<double>());
-			//sum_av_npn = std::accumulate(av[npn], av[npn] + 9, 0.0, std::plus<double>());
-			//std::for_each(au[np], au[np] + 9, [&](double val) { sum_au_np += val; });
-			//std::for_each(au[npn], au[npn] + 9, [&](double val) { sum_au_npn += val; });
-			//std::for_each(av[np], av[np] + 9, [&](double val) { sum_av_np += val; });
-			//std::for_each(av[npn], av[npn] + 9, [&](double val) { sum_av_npn += val; });
 			for (k = 0; k < 9; k++)
 			{
 				sum_au_np += au[np * 9 + k];
@@ -710,7 +692,7 @@ pressure_specificmass get_pressure_density_correction_with_pl(int nx, int ny, do
 	int i;
 
 	//std::transform(p.begin(), p.end(), pl.begin(), p.begin(), std::plus<double>());
-	for (i = 0; i <= nx * ny - 1; i += 1)					// already fixed loop - verify
+	for (i = 0; i <= nx * ny - 1; i += 1)
 	{
 		p[i] = p[i] + pl[i];
 		ro[i] = ro[i] + pl[i]*g[i];
@@ -733,9 +715,9 @@ velocity get_u_v_at_real_nodes_with_pl(int nx, int ny, double* xe, double* ye, d
 	double sum_au_np;
 	double sum_av_np;
 	
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			sum_au_np = 0.0;
 			sum_av_np = 0.0;
@@ -760,10 +742,6 @@ velocity get_u_v_at_real_nodes_with_pl(int nx, int ny, double* xe, double* ye, d
 				+ xk[nps] * (pl[np] + pl[nps])
 				);
 
-			//sum_au_np = std::accumulate(au[np], au[np] + 9, 0.0, std::plus<double>());
-			//sum_av_np = std::accumulate(av[np], av[np] + 9, 0.0, std::plus<double>());
-			//std::for_each(au[np], au[np] + 9, [&](double val) { sum_au_np += val; });
-			//std::for_each(av[np], av[np] + 9, [&](double val) { sum_av_np += val; });
 			for (k = 0; k < 9; k++)
 			{
 				sum_au_np += au[np * 9 + k];
@@ -788,9 +766,9 @@ velocity_face get_velocity_correction_at_faces_with_pl(int nx, int ny, double* d
 	// Auxiliary variables
 	int i, j, np, npn, npe;
 	
-	for (j = 2; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 2; j <= ny - 1; j += 1)
 	{
-		for (i = 0; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 0; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			npe = np + 1;
@@ -803,9 +781,9 @@ velocity_face get_velocity_correction_at_faces_with_pl(int nx, int ny, double* d
 		}
 	}
 	
-	for (j = 1; j <= ny - 1; j += 1)					// already fixed loop - verify
+	for (j = 1; j <= ny - 1; j += 1)
 	{
-		for (i = 1; i <= nx - 1 - 1; i += 1)			// already fixed loop - verify
+		for (i = 1; i <= nx - 1 - 1; i += 1)
 		{
 			np = nx * (j - 1) + i;
 			npn = np + nx;

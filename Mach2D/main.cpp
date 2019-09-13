@@ -142,18 +142,6 @@ int main()
 									, roe, ron, roa, Uce, Vcn
 									, au);
 
-			//for (jj = 1; jj <= ny; jj++)
-			//{
-			//	for (ii = 0; ii < nx; ii++)
-			//	{
-			//		n_p = (jj - 1)*nx + ii;
-			//		for (kk = 0; kk < 9; kk++)
-			//		{
-			//			DGIoutputFile << std::setw(5) << n_p + 1 << " " << std::setw(18) << std::scientific << std::setprecision(10) << au[n_p * 9 + kk] << std::endl;
-			//		}
-			//	}
-			//}
-
 			// Source of the linear system for u (real volumes)									cup, bu OK
 			cup_bu = get_u_source(nx, ny, beta, dt, rp, re, rn, ye, yk
 								, Jp, roe, ron, roa, p, Uce, Vcn, ua, u, cup, bu);
@@ -339,7 +327,7 @@ int main()
 			Uce = velocities_face.Uce;
 			Vcn = velocities_face.Vcn;
 
-			// Calculates density at faces using the corrected density and velocities at nodes		// VERIFY, maybe inout roe, ron
+			// Calculates density at faces using the corrected density and velocities at nodes
 			roe_ron = get_density_at_faces(nx, ny, beta, ro, Uce, Vcn, roe, ron);
 			roe = roe_ron.roe;															//		roe, ron OK							roe, ron - precision e-4
 			ron = roe_ron.ron;
@@ -390,16 +378,6 @@ int main()
 
 			res = res_u + res_v + res_T + res_p;											  //res and other OK					all lower or good
 
-			//std::cout << std::setw(18) << std::scientific << std::setprecision(10) << res << " " << res_u << " " << res_v << " " << res_T << " " << res_p << std::endl;
-			//for (jj = 1; jj <= ny; jj++)
-			//{
-			//	for (ii = 0; ii < nx; ii++)
-			//	{
-			//		n_p = (jj - 1)*nx + ii;
-			//		DGIoutputFile << std::setw(5) << n_p + 1 << " " << std::setw(18) << std::scientific << std::setprecision(10) << ron[n_p] << std::endl;
-			//	}
-			//}
-
 			if (isnan(res))
 			{
 				std::cout << "NaN found. Stopping..." << std::endl;
@@ -415,11 +393,10 @@ int main()
 		{
 			Cdfi = get_cdfi(nx, ny, coord, Rg, PF, TF, UF, rb, yk, rn, p, Cdfi);
 
-			std::cout << "it" << "\t" << "Residuals" << "\t" << "Cdfi" << "\t" << "it_stop" << std::endl;
+			std::cout << std::setw(10) << "it" << " " << std::setw(24) << "Residuals" << " " << std::setw(24) << "Cdfi" << " " << std::setw(10) << "it_stop" << std::endl;
 
-			outputFile << "it" << "\t" << "Residuals" << "\t" << "Cdfi" << "\t" << "it_stop" << std::endl;
+			outputFile << std::setw(10) << "it" << " " << std::setw(24) << "Residuals" << " " << std::setw(24) << "Cdfi" << " " << std::setw(10) << "it_stop" << std::endl;
 
-			//outputFile << it << "\t" << res << "\t" << Cdfi << "\t" << it_stop << std::endl;
 			outputFile << std::setw(10) << it << " " << std::setw(24) << std::scientific << std::setprecision(16) << res << " "  << std::setw(24) << Cdfi << " " << std::setw(10) << it_stop << std::endl;
 		}
 
@@ -427,10 +404,8 @@ int main()
 		{
 			Cdfi = get_cdfi(nx, ny, coord, Rg, PF, TF, UF, rb, yk, rn, p, Cdfi);
 
-			//std::cout << it << "\t" << res << "\t" << Cdfi << "\t" << it_stop << std::endl;
 			std::cout << std::setw(10) << it << " " << std::setw(24) << std::scientific << std::setprecision(16) << res << " " << std::setw(24) << Cdfi << " " << std::setw(10) << it_stop << std::endl;
 
-			//outputFile << it << "\t" << res << "\t" << Cdfi << "\t" << it_stop << std::endl;
 			outputFile << std::setw(10) << it << " " << std::setw(24) << std::scientific << std::setprecision(16) << res << " " << std::setw(24) << Cdfi << " " << std::setw(10) << it_stop << std::endl;
 		}
 
@@ -457,8 +432,6 @@ int main()
 
 	// Finishing cpu time
 	auto tcpu2 = std::chrono::steady_clock::now();
-	//tcpu = std::chrono::duration_cast<std::chrono::milliseconds>(tcpu2 - tcpu1).count();
-	//std::cout << "Elapsed time:" << " " << tcpu << std::endl;
 	std::chrono::duration<double, std::milli> tcpu = tcpu2 - tcpu1;
 	std::cout << "Elapsed time:" << " " << tcpu.count() << std::endl;
 
