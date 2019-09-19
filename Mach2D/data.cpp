@@ -162,8 +162,8 @@ double* z;	  //< vector used to solve linear system Uz =  w
 
 void get_parameters()
 {
-	//> Reads the parameters from an input data file, which name is in ./mach2d_input/mach2d_input.txt.
-	//// Input and output variables are not explicited.
+	// Reads the parameters from an input data file, which name is in ./mach2d_input/mach2d_input.txt.
+	// Input and output variables are not explicited.
 
 	//time_t now = time(0);
 	//char* dt = ctime(&now);

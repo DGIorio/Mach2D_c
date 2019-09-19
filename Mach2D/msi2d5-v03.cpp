@@ -148,6 +148,7 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 		ip = ni - 1;
 		w[ip] = -(r[ip] + dl[ip * 4 + 1] * w[ip - 1] + dl[ip * 4 + 2] * w[ip - ni + 1]) / dl[ip * 4 + 0];
 		//---------------------------------------------------------------------
+		//#pragma omp parallel for
 		for (ip = ni; ip <= nij - 1; ip += 1)
 		{
 			w[ip] = -(r[ip] + dl[ip * 4 + 1] * w[ip - 1] + dl[ip * 4 + 2] * w[ip - ni + 1] + dl[ip * 4 + 3] * w[ip - ni]) / dl[ip * 4 + 0];
@@ -168,6 +169,7 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 		z[ip] = w[ip] - du[ip * 3 + 0] * z[ip + 1] - du[ip * 3 + 1] * z[ip + ni - 1];
 		//-----------------------------------------------------
 		//for (ip = nij - ni - 1 + 1; ip-- > 0;)
+		//#pragma omp parallel for
 		for (ip = nij - ni - 1; ip >= 0; ip -= 1)
 		{
 			z[ip] = w[ip] - du[ip * 3 + 0] * z[ip + 1] - du[ip * 3 + 1] * z[ip + ni - 1] - du[ip * 3 + 2] * z[ip + ni];
@@ -176,6 +178,7 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 
 		// Updating solution
 		//------------------
+		//#pragma omp parallel for
 		for (ip = 0; ip <= nij - 1; ip += 1)
 		{
 			var[ip] = z[ip] + var[ip];
@@ -204,6 +207,7 @@ double* fb2d5(double* b, double* dl, double* du, int nj, int ni, int nij, double
 		r[ip] = -rhs[ip] + b[ip * 5 + 1] * var[iw] + b[ip * 5 + 2] * var[ip]
 			+ b[ip * 5 + 4] * var[in];
 		//--------------------------------------------------------------------------------
+		//#pragma omp parallel for
 		for (ip = ni; ip <= nij - ni - 1; ip += 1)
 		{
 			iw = ip - 1;
