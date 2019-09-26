@@ -1,6 +1,6 @@
 S01 sim_id- Simulation identification(up to 100 characters)
-200 nx-2- Number of real volumes in the csi direction
-200 ny-2- Number of real volumes in the eta direction
+120 nx-2- Number of real volumes in the csi direction
+120 ny-2- Number of real volumes in the eta direction
 2.9356409098089E+00 la- length of the elliptical x semi-axis (m)
 2.0000000000000E+00 lb- length of the elliptical y semi-axis (m)
 2.8356409098089E+00 lr- length of the body (m)
